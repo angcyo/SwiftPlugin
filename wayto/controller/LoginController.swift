@@ -129,15 +129,14 @@ class LoginController: BaseUIViewController {
             }
 
             //圆角
-            doMain {
-                footerView.setRoundTop(8)
-            }
+            footerView.setRoundTop(8)
         }
     }
 
     /// 开始登录
     func login() {
         hideKeyboard()
-        showLoading()
+        //showLoading()
+        showBottomLoading()
     }
 }
