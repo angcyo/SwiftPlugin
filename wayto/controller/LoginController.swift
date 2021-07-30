@@ -7,14 +7,23 @@
 
 import Foundation
 import UIKit
+import RxKeyboard
+import Toast_Swift
+import ProgressHUD
 
 /// 登录界面
-class LoginController: UIViewController {
+class LoginController: BaseUIViewController {
 
     /// 状态栏样式
     override var preferredStatusBarStyle: UIStatusBarStyle {
         /// 白色字体的状态栏
         .lightContent
+    }
+
+    /// 点击空白处隐藏键盘
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
     }
 
     override func viewDidLoad() {
@@ -23,6 +32,22 @@ class LoginController: UIViewController {
         view.backgroundColor = UIColor.white
         let headerHeight = UIScreen.height / 3
         let footerHeight = UIScreen.height - headerHeight + 20
+        var safeTop = view.safeAreaInsets.top
+
+        //键盘监听
+        RxKeyboard.instance.visibleHeight.drive(onNext: { height in
+            print("键盘可见高度:\(height)")
+            print("安全区域:\(safeTop):\(self.view.safeAreaInsets):\(self.view.layoutMargins)")
+            print("安全区域:\(self.view.safeAreaLayoutGuide)")
+            if height > 0 {
+                // 键盘显示
+                safeTop = max(safeTop, self.view.safeAreaInsets.top)
+                self.view.frame.origin.y = -(UIScreen.height - footerHeight - safeTop)
+            } else {
+                // 键盘隐藏
+                self.view.frame.origin.y = 0
+            }
+        }).disposed(by: disposeBag)
 
         //上部分
         view.render(v()) { headerView in
@@ -51,42 +76,68 @@ class LoginController: UIViewController {
             footerView.makeFullWidth()
             footerView.makeHeight(footerHeight)
 
-            footerView.render(vStackView(.leading, spacing: 10)) { stack in
-                stack.makeGravityTop(offset: 30)
-                stack.makeGravityLeft(offset: 30)
-                stack.makeGravityRight(offset: -30)
-                //stack.makeGravityBottom(-30)
-                //stack.setBackground(UIColor.brown)
+            let offset = 20
 
-                stack.render(labelView("欢迎登录")) { label in
-                    label.bold()
-                    label.setTextSize(20)
-                    label.setTextColor("#070822")
-                }
-                stack.render(textField()) { text in
-                    text.text = "qqqq"
-//                    text.setBackground(UIColor.red)
-                    text.makeFullWidth()
-                }
-               let last =  stack.render(textField()) { text in
-                    text.text = "qqqq22222"
-//                    text.setBackground(UIColor.blue)
-                }
-                stack.render(button()) { button in
-                    //button. = "qqqq22222"
-                    button.makeHeight(minHeight: 100)
-                    button.setTitle("登      录", for: .normal)
-                    button.makeFullWidth()
-                    button.setBackground(UIColor.green)
-                    //button.makeGravityTop(ConstraintTarget.LAST, offset: 30)
-                    //button.makeTopToBottomOf(offset: 50)
-                    //button.layoutMargins = UIEdgeInsets(top: 30, left: 0, bottom: 0, right: 0)
-                }
+            footerView.render(labelView("欢迎登录")) { label in
+                label.bold()
+                label.setTextSize(20)
+                label.setTextColor("#070822")
+                label.makeGravityTop(offset: 30)
+                label.makeGravityHorizontal(offset: offset)
             }
 
+            let secureTextField = secureTextField("请输入密码", borderStyle: .none)
+            footerView.render(textFieldView("请输入账号", borderStyle: .none)) { text in
+                //text.text = "qqqq"
+                text.makeTopToBottomOf(offset: offset)
+                text.makeGravityHorizontal(offset: offset)
+                text.makeHeight(minHeight: 50)
+                self.holdObj(text.doReturnAction(.next) { textField in
+                    secureTextField.becomeFirstResponder()
+                    return true
+                })
+            }
+            footerView.render(hLine()) { line in
+                line.makeBottomToBottomOf()
+                line.makeLeftToLeftOf()
+                line.makeRightToRightOf()
+            }
+
+            footerView.render(secureTextField) { text in
+                //text.text = "qqqq22222"
+                text.makeTopToBottomOf(offset: offset)
+                text.makeGravityHorizontal(offset: offset)
+                text.makeHeight(minHeight: 50)
+                self.holdObj(text.doReturnAction(.go) { textField in
+                    textField.resignFirstResponder()
+                    self.login()
+                    return true
+                })
+            }
+            footerView.render(hLine()) { line in
+                line.makeBottomToBottomOf()
+                line.makeLeftToLeftOf()
+                line.makeRightToRightOf()
+            }
+            footerView.render(button("登      录")) { button in
+                button.makeHeight(minHeight: 50)
+                button.makeTopToBottomOf(offset: offset * 2)
+                button.makeGravityHorizontal(offset: offset)
+                self.holdObj(button.onClick {
+                    self.login()
+                })
+            }
+
+            //圆角
             doMain {
                 footerView.setRoundTop(8)
             }
         }
+    }
+
+    /// 开始登录
+    func login() {
+        hideKeyboard()
+        showLoading()
     }
 }
