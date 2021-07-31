@@ -10,6 +10,7 @@ import UIKit
 import RxKeyboard
 import Toast_Swift
 import ProgressHUD
+import RxGesture
 
 /// 登录界面
 class LoginController: BaseUIViewController {
@@ -26,6 +27,9 @@ class LoginController: BaseUIViewController {
         view.endEditing(true)
     }
 
+    var usernameField: UITextField? = nil
+    var passwordField: UITextField? = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,6 +37,8 @@ class LoginController: BaseUIViewController {
         let headerHeight = UIScreen.height / 3
         let footerHeight = UIScreen.height - headerHeight + 20
         var safeTop = view.safeAreaInsets.top
+
+        print("安全区域mainWindow:\(UIApplication.mainWindow?.safeAreaInsets):\(UIApplication.mainWindow?.layoutMargins)")
 
         //键盘监听
         RxKeyboard.instance.visibleHeight.drive(onNext: { height in
@@ -87,8 +93,8 @@ class LoginController: BaseUIViewController {
             }
 
             let secureTextField = secureTextField("请输入密码", borderStyle: .none)
-            footerView.render(textFieldView("请输入账号", borderStyle: .none)) { text in
-                //text.text = "qqqq"
+            self.passwordField = secureTextField
+            self.usernameField = footerView.render(textFieldView("请输入账号", borderStyle: .none)) { text in
                 text.makeTopToBottomOf(offset: offset)
                 text.makeGravityHorizontal(offset: offset)
                 text.makeHeight(minHeight: 50)
@@ -131,12 +137,40 @@ class LoginController: BaseUIViewController {
             //圆角
             footerView.setRoundTop(8)
         }
+
+        if D.isBeingDebugged {
+            usernameField?.text = "admin"
+            passwordField?.text = "admin"
+        }
     }
 
     /// 开始登录
     func login() {
+        let username = usernameField?.text
+        if username?.isEmpty == true {
+            usernameField?.becomeFirstResponder()
+            toast("请输入账号", position: .top)
+            return
+        }
+
+        let password = passwordField?.text
+        if password?.isEmpty == true {
+            passwordField?.becomeFirstResponder()
+            toast("请输入密码", position: .top)
+            return
+        }
+
         hideKeyboard()
-        //showLoading()
-        showBottomLoading()
+        showLoading()
+        vm(UserModel.self).login(username!, password!) { data, error in
+            hideLoading()
+            if data != nil, error == nil {
+                toast("登录成功")
+            } else {
+                toast("登录失败")
+            }
+        }
     }
 }
+
+import Alamofire
