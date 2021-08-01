@@ -138,7 +138,7 @@ class LoginController: BaseUIViewController {
             footerView.setRoundTop(8)
         }
 
-        if D.isBeingDebugged {
+        if D.isDebug {
             usernameField?.text = "admin"
             passwordField?.text = "admin"
         }
@@ -166,10 +166,35 @@ class LoginController: BaseUIViewController {
             hideLoading()
             if data != nil, error == nil {
                 toast("登录成功")
+                self.showMain()
             } else {
                 toast("登录失败")
             }
         }
+    }
+
+    func showMain() {
+        let collection = UICollectionView()
+        collection.register(DslView.self, forCellWithReuseIdentifier: <#T##String##Swift.String#>)
+
+        let tabVc = UITabBarController()
+        tabVc.addChild(UIViewController().apply { (vc: UIViewController) in
+            vc.view.setBackground(UIColor.red)
+            vc.tabBarItem.title = "ttt."
+            vc.tabBarItem.image = R.image.loginHeaderBg()
+            vc.tabBarItem.badgeValue = "999+"
+        })
+        tabVc.addChild(UIViewController().apply { (vc: UIViewController) in
+            vc.view.setBackground(UIColor.yellow)
+            vc.tabBarItem.title = "2222."
+            vc.tabBarItem.image = R.image.launchLogo()
+            vc.tabBarItem.badgeValue = "999+"
+        })
+        tabVc.addChild(UIViewController().apply { (vc: UIViewController) in
+            vc.view.setBackground(UIColor.green)
+            vc.tabBarItem.title = "3."
+        })
+        UIApplication.mainWindow?.rootViewController = tabVc
     }
 }
 
