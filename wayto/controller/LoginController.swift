@@ -64,10 +64,10 @@ class LoginController: BaseUIViewController {
             headerView.makeHeight(headerHeight)
 
             headerView.render(vStackView(spacing: 13)) { stack in
-                stack.render(imageView(R.image.launchLogo())) { image in
+                stack.render(img(R.image.launchLogo())) { image in
                     image.makeWidthHeight(67, 67)
                 }
-                stack.render(labelView(Bundle.displayName(), size: Res.Text.big.size, color: UIColor.white)) { label in
+                stack.render(labelView(Bundle.displayName(), size: Res.text.big.size, color: UIColor.white)) { label in
                     label.bold()
                     //view.sizeToFit()
                 }
@@ -174,26 +174,15 @@ class LoginController: BaseUIViewController {
     }
 
     func showMain() {
-        let collection = UICollectionView()
-        collection.register(DslView.self, forCellWithReuseIdentifier: <#T##String##Swift.String#>)
+        //let collection = UICollectionView()
+        //collection.register(DslView.self, forCellWithReuseIdentifier: <#T##String##Swift.String#>)
 
         let tabVc = UITabBarController()
         tabVc.addChild(UIViewController().apply { (vc: UIViewController) in
             vc.view.setBackground(UIColor.red)
-            vc.tabBarItem.title = "ttt."
-            vc.tabBarItem.image = R.image.loginHeaderBg()
-            vc.tabBarItem.badgeValue = "999+"
+            vc.tabBarItem.title = "首页"
         })
-        tabVc.addChild(UIViewController().apply { (vc: UIViewController) in
-            vc.view.setBackground(UIColor.yellow)
-            vc.tabBarItem.title = "2222."
-            vc.tabBarItem.image = R.image.launchLogo()
-            vc.tabBarItem.badgeValue = "999+"
-        })
-        tabVc.addChild(UIViewController().apply { (vc: UIViewController) in
-            vc.view.setBackground(UIColor.green)
-            vc.tabBarItem.title = "3."
-        })
+        tabVc.addChild(MeController())
         UIApplication.mainWindow?.rootViewController = tabVc
     }
 }
