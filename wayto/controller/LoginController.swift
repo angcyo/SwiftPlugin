@@ -11,9 +11,15 @@ import RxKeyboard
 import Toast_Swift
 import ProgressHUD
 import RxGesture
+import RxSwift
+import Alamofire
+import SwiftyJSON
 
 /// 登录界面
-class LoginController: BaseUIViewController {
+class LoginController: BaseViewController {
+
+    /// 登录成功后的启动界面
+    static var MAIN_CONTROLLER: AnyClass? = nil
 
     /// 状态栏样式
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -29,6 +35,15 @@ class LoginController: BaseUIViewController {
 
     var usernameField: UITextField? = nil
     var passwordField: UITextField? = nil
+    var verifyCodeField: UITextField? = nil
+
+    var verifyCodeImage: UIImageView? = nil
+
+    var verifyCodeWidth = 70
+    var verifyCodeHeight = 35
+
+    //验证码
+    var verifyCodeWrapView: UIView? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,6 +98,7 @@ class LoginController: BaseUIViewController {
             footerView.makeHeight(footerHeight)
 
             let offset = 20
+            let fieldHeight = 50
 
             footerView.render(labelView("欢迎登录")) { label in
                 label.bold()
@@ -97,7 +113,7 @@ class LoginController: BaseUIViewController {
             self.usernameField = footerView.render(textFieldView("请输入账号", borderStyle: .none)) { text in
                 text.makeTopToBottomOf(offset: offset)
                 text.makeGravityHorizontal(offset: offset)
-                text.makeHeight(minHeight: 50)
+                text.makeHeight(minHeight: fieldHeight)
                 self.holdObj(text.doReturnAction(.next) { textField in
                     secureTextField.becomeFirstResponder()
                     return true
@@ -113,7 +129,7 @@ class LoginController: BaseUIViewController {
                 //text.text = "qqqq22222"
                 text.makeTopToBottomOf(offset: offset)
                 text.makeGravityHorizontal(offset: offset)
-                text.makeHeight(minHeight: 50)
+                text.makeHeight(minHeight: fieldHeight)
                 self.holdObj(text.doReturnAction(.go) { textField in
                     textField.resignFirstResponder()
                     self.login()
@@ -125,12 +141,63 @@ class LoginController: BaseUIViewController {
                 line.makeLeftToLeftOf()
                 line.makeRightToRightOf()
             }
+
+            //验证码
+            self.verifyCodeWrapView = footerView.render(v()) { (verifyCodeWrapView: UIView) in
+                verifyCodeWrapView.makeHeight(minHeight: fieldHeight)
+                verifyCodeWrapView.makeTopToBottomOf(offset: offset)
+                verifyCodeWrapView.makeGravityHorizontal(offset: offset)
+
+                self.verifyCodeField = verifyCodeWrapView.render(textFieldView("请输入验证码", borderStyle: .none)) { verifyCodeField in
+                    verifyCodeField.keyboardType = .emailAddress
+                    verifyCodeField.makeFullWidth(rightOffset: -(self.verifyCodeWidth + 10))
+                    verifyCodeField.makeFullHeight(fieldHeight)
+                    self.holdObj(verifyCodeField.doReturnAction(.go) { textField in
+                        textField.resignFirstResponder()
+                        self.login()
+                        return true
+                    })
+
+                    //线
+                    verifyCodeWrapView.render(hLine()) { line in
+                        line.makeGravityBottom(offset: -2)
+                        line.makeLeftToLeftOf(nil)
+                        line.makeRightToRightOf(nil)
+                    }
+
+                    //验证码图片
+                    self.verifyCodeImage = verifyCodeWrapView.render(img()) { image in
+                        //image.backgroundColor = UIColor.red
+                        image.contentMode = .scaleAspectFit
+                        image.makeWidthHeight(self.verifyCodeWidth, self.verifyCodeHeight)
+                        image.makeGravityRight()
+                        image.makeCenterY()
+
+                        image.rx.tapGesture()
+                                .when(.recognized)
+                                .subscribe(onNext: { _ in
+                                    self.showVerifyCode()
+                                })
+                                .disposed(by: self.disposeBag)
+                    }
+                }
+            }
+
             footerView.render(button("登      录")) { button in
-                button.makeHeight(minHeight: 50)
+                button.makeHeight(minHeight: fieldHeight)
                 button.makeTopToBottomOf(offset: offset * 2)
                 button.makeGravityHorizontal(offset: offset)
                 self.holdObj(button.onClick {
                     self.login()
+                })
+            }
+
+            footerView.render(borderButton("注      册")) { button in
+                button.makeHeight(minHeight: fieldHeight)
+                button.makeTopToBottomOf(offset: offset)
+                button.makeGravityHorizontal(offset: offset)
+                self.holdObj(button.onClick {
+                    self.register()
                 })
             }
 
@@ -142,6 +209,9 @@ class LoginController: BaseUIViewController {
             usernameField?.text = "admin"
             passwordField?.text = "admin"
         }
+
+        //默认不需要验证码
+        verifyCodeWrapView?.isHidden = true
     }
 
     /// 开始登录
@@ -162,29 +232,52 @@ class LoginController: BaseUIViewController {
 
         hideKeyboard()
         showLoading()
-        vm(UserModel.self).login(username!, password!) { data, error in
-            hideLoading()
-            if data != nil, error == nil {
-                toast("登录成功")
-                self.showMain()
-            } else {
-                toast("登录失败")
-            }
+
+        vm(UserModel.self).loginRequest(username!, password!,
+                        verifyCode: verifyCodeField?.text,
+                        verifyCodeId: uuid,
+                        isVerifyCode: verifyCodeWrapView?.isHidden == false)
+                .requestDecodableRes({ (response: Alamofire.AFDataResponse<LoginBean>, error: Error?) in
+                    hideLoading()
+                    let json = JSON(response.data)
+                    if error == nil {
+                        toast("登录成功")
+                        self.showMain()
+                    } else if let error = error {
+                        let needVerifyCode = response.response?.headers.value(for: "needVerifyCode")
+                        toast(json["msg"].rawString() ?? "登录失败")
+                        if needVerifyCode == "true" {
+                            // 需要验证码登录
+                            self.showVerifyCode()
+                        } else {
+                            // 不需要验证码登录
+                        }
+                    }
+                })
+    }
+
+    /// 跳转注册
+    func register() {
+
+    }
+
+    var uuid: String = ""
+
+    /// 显示验证码
+    func showVerifyCode() {
+        uuid = Util.uuid()
+        verifyCodeWrapView?.isHidden = false
+        let param = "verifyCodeId=\(uuid)&now=\(nowTime)&width=\(verifyCodeWidth)&height=\(verifyCodeHeight)"
+        verifyCodeImage?.setImageUrl(connectUrl(url: "/auth2server/free/getVerifyImg?\(param)"))
+    }
+
+    /// 显示主页
+    func showMain() {
+        if let main = LoginController.MAIN_CONTROLLER {
+            let rootVc: UIViewController = toViewController(main)
+            UIApplication.mainWindow?.rootViewController = rootVc
+        } else {
+            toast("请配置[MAIN_CONTROLLER]", position: .center)
         }
     }
-
-    func showMain() {
-        //let collection = UICollectionView()
-        //collection.register(DslView.self, forCellWithReuseIdentifier: <#T##String##Swift.String#>)
-
-        let tabVc = UITabBarController()
-        tabVc.addChild(UIViewController().apply { (vc: UIViewController) in
-            vc.view.setBackground(UIColor.red)
-            vc.tabBarItem.title = "首页"
-        })
-        tabVc.addChild(MeController())
-        UIApplication.mainWindow?.rootViewController = tabVc
-    }
 }
-
-import Alamofire
