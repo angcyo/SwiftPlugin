@@ -33,6 +33,8 @@ class LoginController: BaseViewController {
         view.endEditing(true)
     }
 
+    var loginButton: UIView? = nil
+
     var usernameField: UITextField? = nil
     var passwordField: UITextField? = nil
     var verifyCodeField: UITextField? = nil
@@ -44,6 +46,9 @@ class LoginController: BaseViewController {
 
     //验证码
     var verifyCodeWrapView: UIView? = nil
+
+    let viewOffset = 20
+    let fieldHeight = 50
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,23 +102,20 @@ class LoginController: BaseViewController {
             footerView.makeFullWidth()
             footerView.makeHeight(footerHeight)
 
-            let offset = 20
-            let fieldHeight = 50
-
             footerView.render(labelView("欢迎登录")) { label in
                 label.bold()
                 label.setTextSize(20)
                 label.setTextColor("#070822")
                 label.makeGravityTop(offset: 30)
-                label.makeGravityHorizontal(offset: offset)
+                label.makeGravityHorizontal(offset: self.viewOffset)
             }
 
             let secureTextField = secureTextField("请输入密码", borderStyle: .none)
             self.passwordField = secureTextField
             self.usernameField = footerView.render(textFieldView("请输入账号", borderStyle: .none)) { text in
-                text.makeTopToBottomOf(offset: offset)
-                text.makeGravityHorizontal(offset: offset)
-                text.makeHeight(minHeight: fieldHeight)
+                text.makeTopToBottomOf(offset: self.viewOffset)
+                text.makeGravityHorizontal(offset: self.viewOffset)
+                text.makeHeight(minHeight: self.fieldHeight)
                 self.holdObj(text.doReturnAction(.next) { textField in
                     secureTextField.becomeFirstResponder()
                     return true
@@ -127,9 +129,9 @@ class LoginController: BaseViewController {
 
             footerView.render(secureTextField) { text in
                 //text.text = "qqqq22222"
-                text.makeTopToBottomOf(offset: offset)
-                text.makeGravityHorizontal(offset: offset)
-                text.makeHeight(minHeight: fieldHeight)
+                text.makeTopToBottomOf(offset: self.viewOffset)
+                text.makeGravityHorizontal(offset: self.viewOffset)
+                text.makeHeight(minHeight: self.fieldHeight)
                 self.holdObj(text.doReturnAction(.go) { textField in
                     textField.resignFirstResponder()
                     self.login()
@@ -144,14 +146,14 @@ class LoginController: BaseViewController {
 
             //验证码
             self.verifyCodeWrapView = footerView.render(v()) { (verifyCodeWrapView: UIView) in
-                verifyCodeWrapView.makeHeight(minHeight: fieldHeight)
-                verifyCodeWrapView.makeTopToBottomOf(offset: offset)
-                verifyCodeWrapView.makeGravityHorizontal(offset: offset)
+                verifyCodeWrapView.makeHeight(minHeight: self.fieldHeight)
+                verifyCodeWrapView.makeTopToBottomOf(offset: self.viewOffset)
+                verifyCodeWrapView.makeGravityHorizontal(offset: self.viewOffset)
 
                 self.verifyCodeField = verifyCodeWrapView.render(textFieldView("请输入验证码", borderStyle: .none)) { verifyCodeField in
                     verifyCodeField.keyboardType = .emailAddress
                     verifyCodeField.makeFullWidth(rightOffset: -(self.verifyCodeWidth + 10))
-                    verifyCodeField.makeFullHeight(fieldHeight)
+                    verifyCodeField.makeFullHeight(self.fieldHeight)
                     self.holdObj(verifyCodeField.doReturnAction(.go) { textField in
                         textField.resignFirstResponder()
                         self.login()
@@ -183,19 +185,19 @@ class LoginController: BaseViewController {
                 }
             }
 
-            footerView.render(button("登      录")) { button in
-                button.makeHeight(minHeight: fieldHeight)
-                button.makeTopToBottomOf(offset: offset * 2)
-                button.makeGravityHorizontal(offset: offset)
+            self.loginButton = footerView.render(button("登      录")) { button in
+                button.makeHeight(minHeight: self.fieldHeight)
+                button.makeTopToBottomOf(secureTextField, offset: self.viewOffset * 2)
+                button.makeGravityHorizontal(offset: self.viewOffset)
                 self.holdObj(button.onClick {
                     self.login()
                 })
             }
 
             footerView.render(borderButton("注      册")) { button in
-                button.makeHeight(minHeight: fieldHeight)
-                button.makeTopToBottomOf(offset: offset)
-                button.makeGravityHorizontal(offset: offset)
+                button.makeHeight(minHeight: self.fieldHeight)
+                button.makeTopToBottomOf(offset: self.viewOffset)
+                button.makeGravityHorizontal(offset: self.viewOffset)
                 self.holdObj(button.onClick {
                     self.register()
                 })
@@ -266,9 +268,24 @@ class LoginController: BaseViewController {
     /// 显示验证码
     func showVerifyCode() {
         uuid = Util.uuid()
-        verifyCodeWrapView?.isHidden = false
-        let param = "verifyCodeId=\(uuid)&now=\(nowTime)&width=\(verifyCodeWidth)&height=\(verifyCodeHeight)"
-        verifyCodeImage?.setImageUrl(connectUrl(url: "/auth2server/free/getVerifyImg?\(param)"))
+        animate {
+            self.verifyCodeWrapView?.isHidden = false
+            let param = "verifyCodeId=\(self.uuid)&now=\(nowTime)&width=\(self.verifyCodeWidth)&height=\(self.verifyCodeHeight)"
+            self.verifyCodeImage?.setImageUrl(connectUrl(url: "/auth2server/free/getVerifyImg?\(param)"))
+
+            if let button = self.loginButton {
+                button.remake { maker in
+                    button.makeHeight(minHeight: self.fieldHeight)
+                    button.makeTopToBottomOf(self.verifyCodeWrapView, offset: self.viewOffset * 2)
+                    button.makeGravityHorizontal(offset: self.viewOffset)
+                }
+            }
+
+            self.verifyCodeField?.becomeFirstResponder()
+
+            // 必须, 否则没有动画
+            self.view.layoutIfNeeded()
+        }
     }
 
     /// 显示主页
