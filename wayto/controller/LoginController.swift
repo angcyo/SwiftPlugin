@@ -52,6 +52,7 @@ class LoginController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "登录"
 
         view.backgroundColor = UIColor.white
         let headerHeight = UIScreen.height / 3
