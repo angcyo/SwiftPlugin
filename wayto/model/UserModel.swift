@@ -5,8 +5,12 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import RxSwift
 
 class UserModel: ViewModel {
+
+    /// 登录成功之后的数据结构
+    let loginBeanData = liveData(LoginBean())
 
     // 登录请求
     func loginRequest(_ username: String,
@@ -44,6 +48,7 @@ class UserModel: ViewModel {
                         userId: data.user!.userId!,
                         expiration: Date(timeIntervalSince1970: nowTime + TimeInterval(data.expires_in!)))
             }
+            self.loginBeanData.onNext(loginBean ?? LoginBean())
             onResult(loginBean, error)
         }
     }

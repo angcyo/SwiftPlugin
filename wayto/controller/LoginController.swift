@@ -189,18 +189,18 @@ class LoginController: BaseViewController {
                 button.makeHeight(minHeight: self.fieldHeight)
                 button.makeTopToBottomOf(secureTextField, offset: self.viewOffset * 2)
                 button.makeGravityHorizontal(offset: self.viewOffset)
-                self.holdObj(button.onClick {
+                button.onClick { _ in
                     self.login()
-                })
+                }
             }
 
             footerView.render(borderButton("注      册")) { button in
                 button.makeHeight(minHeight: self.fieldHeight)
                 button.makeTopToBottomOf(offset: self.viewOffset)
                 button.makeGravityHorizontal(offset: self.viewOffset)
-                self.holdObj(button.onClick {
+                button.onClick { _ in
                     self.register()
-                })
+                }
             }
 
             //圆角
@@ -241,6 +241,10 @@ class LoginController: BaseViewController {
                         isVerifyCode: verifyCodeWrapView?.isHidden == false)
                 .requestDecodableRes({ (response: Alamofire.AFDataResponse<LoginBean>, error: Error?) in
                     hideLoading()
+
+                    //
+                    vm(UserModel.self).loginBeanData.onNext(response.value ?? LoginBean())
+
                     let json = JSON(response.data)
                     if error == nil {
                         toast("登录成功")
@@ -260,7 +264,7 @@ class LoginController: BaseViewController {
 
     /// 跳转注册
     func register() {
-
+        toast("注册")
     }
 
     var uuid: String = ""

@@ -4,7 +4,14 @@
 
 import Foundation
 
-struct LoginBean: Codable {
+struct LoginBean: Codable, NilObject {
+
+    var isNil: Bool {
+        get {
+            user == nil
+        }
+    }
+
     var access_token: String? = nil
     var refresh_token: String? = nil
     var token_type: String? = nil
