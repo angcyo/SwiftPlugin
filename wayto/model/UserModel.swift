@@ -52,4 +52,9 @@ class UserModel: ViewModel {
             onResult(loginBean, error)
         }
     }
+
+    // 退出登录
+    func logout() {
+
+    }
 }
