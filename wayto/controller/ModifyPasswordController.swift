@@ -7,6 +7,7 @@ import UIKit
 
 /// 修改密码
 class ModifyPasswordController: BaseTableViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "修改密码"
@@ -19,24 +20,27 @@ class ModifyPasswordController: BaseTableViewController {
     override func initTableView(tableView: DslTableView) {
         super.initTableView(tableView: tableView)
 
-        tableView.render(.editPasswordCell) { item in
-            item.onBindCell = { cell, index in
+        tableView.tableHeaderView = emptyView(height: Res.size.leftMargin)
+        tableView.tableFooterView = emptyView(height: Res.size.leftMargin)
+
+        tableView.load(.editPasswordCell) { item in
+            item.onBindTableCell = { cell, index in
                 if let cell = cell as? EditPasswordCell {
                     cell.label.text = "旧密码"
                     cell.textField.placeholder = "请输入"
                 }
             }
         }
-        tableView.render(.editPasswordCell) { item in
-            item.onBindCell = { cell, index in
+        tableView.load(.editPasswordCell) { item in
+            item.onBindTableCell = { cell, index in
                 if let cell = cell as? EditPasswordCell {
                     cell.label.text = "新密码"
                     cell.textField.placeholder = "请输入"
                 }
             }
         }
-        tableView.render(.editPasswordCell) { item in
-            item.onBindCell = { cell, index in
+        tableView.load(.editPasswordCell) { item in
+            item.onBindTableCell = { cell, index in
                 if let cell = cell as? EditPasswordCell {
                     cell.label.text = "重复新密码"
                     cell.textField.placeholder = "请输入"
@@ -46,13 +50,15 @@ class ModifyPasswordController: BaseTableViewController {
             }
         }
 
-        tableView.render(.buttonCell) { item in
+        tableView.load(.buttonCell) { (item: DslTableItem) in
             item.itemSectionName = "button"
-            item.onBindCell = { cell, index in
+            item.itemHeaderEstimatedHeight = 50
+            item.onBindTableCell = { cell, index in
                 if let cell = cell as? DslButtonCell {
                     cell.button.setText("保存")
                     cell.button.onClick(bag: self.disposeBag) { recognizer in
                         toast("保存")
+                        showViewController(HomeController())
                     }
                 }
             }

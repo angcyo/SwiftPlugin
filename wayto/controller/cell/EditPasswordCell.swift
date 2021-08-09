@@ -28,6 +28,7 @@ class EditPasswordCell: DslTableCell {
         textField.borderStyle = .none //去掉边框
         contentView.render(textField) { view in
             //view.sizeToFit()
+            view.makeHeight(50)
             view.makeLeftToRightOf(self.label)
             view.makeGravityRight(offset: -offset)
             view.makeCenterY()
@@ -43,8 +44,8 @@ class EditPasswordCell: DslTableCell {
 }
 
 extension DslItem {
-    static var editPasswordCell: DslItem {
-        let item = DslItem(EditPasswordCell.self)
+    static var editPasswordCell: DslTableItem {
+        let item = DslTableItem(EditPasswordCell.self)
         item.itemHeight = 50
 //        item.itemHeaderHeight = 0.01
 //        item.itemFooterHeight = 0.01
