@@ -220,14 +220,14 @@ class LoginController: BaseViewController {
     /// 开始登录
     func login() {
         let username = usernameField?.text
-        if username?.isEmpty == true {
+        if nilOrEmpty(username) {
             usernameField?.becomeFirstResponder()
             toast("请输入账号", position: .top)
             return
         }
 
         let password = passwordField?.text
-        if password?.isEmpty == true {
+        if nilOrEmpty(password) {
             passwordField?.becomeFirstResponder()
             toast("请输入密码", position: .top)
             return
@@ -244,7 +244,12 @@ class LoginController: BaseViewController {
                     hideLoading()
 
                     //
-                    vm(UserModel.self).loginBeanData.onNext(response.value ?? LoginBean())
+                    vm(UserModel.self).apply { (vm: UserModel) in
+                        if let bean = response.value {
+                            vm.loginBeanData.onNext(bean)
+                            vm.initAuthCredential(bean)
+                        }
+                    }
 
                     let json = JSON(response.data)
                     if error == nil {
@@ -252,7 +257,7 @@ class LoginController: BaseViewController {
                         self.showMain()
                     } else if let error = error {
                         let needVerifyCode = response.response?.headers.value(for: "needVerifyCode")
-                        toast(json["msg"].rawString() ?? "登录失败")
+                        toast((json["msg"].rawStringOrNil() ?? error.message).ifEmpty("登录失败"))
                         if needVerifyCode == "true" {
                             // 需要验证码登录
                             self.showVerifyCode()
@@ -266,6 +271,22 @@ class LoginController: BaseViewController {
     /// 跳转注册
     func register() {
         toast("注册")
+        var json = JSON()
+        var path = ["p", "p1", "p2"]
+        json.ensurePath(path)
+
+        var obj = JSON()
+        obj["a"] = 1
+        obj["b"] = "b"
+        json.add(path, value: obj)
+        json.add(path, value: obj)
+        //json[path]
+        //json["d2"] = ["dd2_1", "dd2_2"]
+
+        try! json.merge(with: obj)
+
+        print(json)
+        print(json.dictionaryObject)
     }
 
     var uuid: String = ""

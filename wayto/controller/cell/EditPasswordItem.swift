@@ -5,6 +5,38 @@
 import Foundation
 import UIKit
 
+class EditPasswordItem: DslTableItem, IEditItem, IFormItem {
+
+    var itemEditText: String? = nil
+
+    var formItemConfig: FormItemConfig = FormItemConfig()
+
+    override func initItem() {
+        itemCell = EditPasswordCell.self
+
+        itemHeight = 50
+//        item.itemHeaderHeight = 0.01
+//        item.itemFooterHeight = 0.01
+//        item.itemHeaderEstimatedHeight = 0.01
+//        item.itemFooterEstimatedHeight = 0.01
+
+        itemCanHighlight = false
+        itemCanSelect = false
+    }
+
+    override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
+        super.bindCell(cell, indexPath)
+        guard let cell = cell as? EditPasswordCell else {
+            return
+        }
+        initEditItem(cell.textField)
+    }
+
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        itemEditText = textField.text
+    }
+}
+
 class EditPasswordCell: DslTableCell {
 
     let label = labelView(color: Res.text.body.color)
@@ -40,20 +72,5 @@ class EditPasswordCell: DslTableCell {
             line.makeGravityRight(offset: -offset)
             line.makeBottomToBottomOf(self.contentView)
         }
-    }
-}
-
-extension DslItem {
-    static var editPasswordCell: DslTableItem {
-        let item = DslTableItem(EditPasswordCell.self)
-        item.itemHeight = 50
-//        item.itemHeaderHeight = 0.01
-//        item.itemFooterHeight = 0.01
-//        item.itemHeaderEstimatedHeight = 0.01
-//        item.itemFooterEstimatedHeight = 0.01
-
-        item.itemCanHighlight = false
-        item.itemCanSelect = false
-        return item
     }
 }

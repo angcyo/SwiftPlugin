@@ -42,19 +42,27 @@ class UserModel: ViewModel {
         loginRequest(username, password).requestDecodable { (loginBean: LoginBean?, error: Error?) in
             debugPrint("登录返回:\(loginBean):\(error)")
             if let data = loginBean {
-                Http.credential = OAuthCredential(
-                        accessToken: data.access_token!,
-                        refreshToken: data.refresh_token!,
-                        userId: data.user!.userId!,
-                        expiration: Date(timeIntervalSince1970: nowTime + TimeInterval(data.expires_in!)))
+                self.initAuthCredential(data)
             }
             self.loginBeanData.onNext(loginBean ?? LoginBean())
             onResult(loginBean, error)
         }
     }
 
+    func initAuthCredential(_ loginBean: LoginBean) {
+        Http.credential = OAuthCredential(
+                accessToken: loginBean.access_token!,
+                refreshToken: loginBean.refresh_token!,
+                userId: loginBean.user!.userId!,
+                expiration: Date(timeIntervalSince1970: nowTime + TimeInterval(loginBean.expires_in!)))
+    }
+
     // 退出登录
     func logout() {
 
+    }
+
+    func updatePassword(_ param: [String: Any]?, _ onResult: @escaping (JSON?, Error?) -> Void) {
+        Api.put("\(App.SystemSchema)/user/updatePassword", query: param).requestJson(onResult)
     }
 }
