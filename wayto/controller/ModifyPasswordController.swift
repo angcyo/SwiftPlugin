@@ -96,16 +96,16 @@ class ModifyPasswordController: BaseTableViewController {
         formHelper.checkAndObtain(tableView: dslTableView) { params, error in
             debugPrint(params.jsonData)
             if let error = error {
-                toast(error.message)
+                toast(error.message, position: .center)
             } else {
                 hideKeyboard()
                 showLoading()
                 vm(LoginModel.self).updatePassword(params.jsonData.dictionaryObject) { json, error in
                     hideLoading()
                     if let error = error {
-                        toast(error.message)
+                        messageWarn(error.message)
                     } else {
-                        toast("修改成功")
+                        messageSuccess("修改成功")
                         pop(self)
                     }
                 }
