@@ -246,8 +246,7 @@ class LoginController: BaseViewController {
                     //
                     vm(LoginModel.self).apply { (vm: LoginModel) in
                         if let bean = response.value {
-                            vm.loginBeanData.onNext(bean)
-                            vm.initAuthCredential(bean)
+                            vm.loginSucceed(bean)
                         }
                     }
 

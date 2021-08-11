@@ -12,6 +12,8 @@ class LoginModel: ViewModel {
     /// 登录成功之后的数据结构
     let loginBeanData = liveData(LoginBean())
 
+    //MARK: 请求
+
     // 登录请求
     func loginRequest(_ username: String,
                       _ password: String,
@@ -42,19 +44,29 @@ class LoginModel: ViewModel {
         loginRequest(username, password).requestDecodable { (loginBean: LoginBean?, error: Error?) in
             debugPrint("登录返回:\(loginBean):\(error)")
             if let data = loginBean {
-                self.initAuthCredential(data)
+                self.loginSucceed(data)
             }
-            self.loginBeanData.onNext(loginBean ?? LoginBean())
             onResult(loginBean, error)
         }
     }
 
-    func initAuthCredential(_ loginBean: LoginBean) {
+    func updatePassword(_ param: [String: Any]?, _ onResult: @escaping (JSON?, Error?) -> Void) {
+        Api.put("\(App.SystemSchema)/user/updatePassword", query: param).requestJson(onResult)
+    }
+
+    //MARK: 操作
+
+    /// 登录成功
+    func loginSucceed(_ loginBean: LoginBean) {
         Http.credential = OAuthCredential(
                 accessToken: loginBean.access_token!,
                 refreshToken: loginBean.refresh_token!,
                 userId: loginBean.user!.userId!,
                 expiration: Date(timeIntervalSince1970: nowTime + TimeInterval(loginBean.expires_in!)))
+        loginBeanData.onNext(loginBean)
+
+        /// 获取用户详情资料
+        vm(UserModel.self).getUserDetailEx()
     }
 
     // 退出登录
@@ -62,7 +74,4 @@ class LoginModel: ViewModel {
 
     }
 
-    func updatePassword(_ param: [String: Any]?, _ onResult: @escaping (JSON?, Error?) -> Void) {
-        Api.put("\(App.SystemSchema)/user/updatePassword", query: param).requestJson(onResult)
-    }
 }
