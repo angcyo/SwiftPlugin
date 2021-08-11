@@ -69,7 +69,7 @@ class LoginController: BaseViewController {
             if height > 0 {
                 // 键盘显示
                 safeTop = max(safeTop, self.view.safeAreaInsets.top)
-                self.view.frame.origin.y = -(UIScreen.height - footerHeight - safeTop)
+                self.view.frame.origin.y = -(UIScreen.height - footerHeight - safeTop.toFloat()).toCGFloat()
             } else {
                 // 键盘隐藏
                 self.view.frame.origin.y = 0
@@ -236,7 +236,7 @@ class LoginController: BaseViewController {
         hideKeyboard()
         showLoading()
 
-        vm(UserModel.self).loginRequest(username!, password!,
+        vm(LoginModel.self).loginRequest(username!, password!,
                         verifyCode: verifyCodeField?.text,
                         verifyCodeId: uuid,
                         isVerifyCode: verifyCodeWrapView?.isHidden == false)
@@ -244,7 +244,7 @@ class LoginController: BaseViewController {
                     hideLoading()
 
                     //
-                    vm(UserModel.self).apply { (vm: UserModel) in
+                    vm(LoginModel.self).apply { (vm: LoginModel) in
                         if let bean = response.value {
                             vm.loginBeanData.onNext(bean)
                             vm.initAuthCredential(bean)
@@ -287,6 +287,8 @@ class LoginController: BaseViewController {
 
         print(json)
         print(json.dictionaryObject)
+
+        message("消息测试")
     }
 
     var uuid: String = ""

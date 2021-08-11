@@ -7,7 +7,7 @@ import Alamofire
 import SwiftyJSON
 import RxSwift
 
-class UserModel: ViewModel {
+class LoginModel: ViewModel {
 
     /// 登录成功之后的数据结构
     let loginBeanData = liveData(LoginBean())

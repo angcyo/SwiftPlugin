@@ -35,6 +35,11 @@ class EditPasswordItem: DslTableItem, IEditItem, IFormItem {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         itemEditText = textField.text
     }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 
 class EditPasswordCell: DslTableCell {

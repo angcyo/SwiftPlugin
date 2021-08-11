@@ -93,19 +93,21 @@ class ModifyPasswordController: BaseTableViewController {
 
     /// 提交
     func submit() {
-        formHelper.checkAndObtain(tableView: dslTableView) { params in
+        formHelper.checkAndObtain(tableView: dslTableView) { params, error in
             debugPrint(params.jsonData)
-
-            hideKeyboard()
-            showLoading()
-
-            vm(UserModel.self).updatePassword(params.jsonData.dictionaryObject) { json, error in
-                hideLoading()
-                if let error = error {
-                    toast(error.message)
-                } else {
-                    toast("修改成功")
-                    pop(self)
+            if let error = error {
+                toast(error.message)
+            } else {
+                hideKeyboard()
+                showLoading()
+                vm(LoginModel.self).updatePassword(params.jsonData.dictionaryObject) { json, error in
+                    hideLoading()
+                    if let error = error {
+                        toast(error.message)
+                    } else {
+                        toast("修改成功")
+                        pop(self)
+                    }
                 }
             }
         }
