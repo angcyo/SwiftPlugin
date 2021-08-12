@@ -47,7 +47,7 @@ class LoginController: BaseViewController {
     //验证码
     var verifyCodeWrapView: UIView? = nil
 
-    let viewOffset = 20
+    let viewOffset: Float = 20
     let fieldHeight = 50
 
     override func viewDidLoad() {
@@ -105,7 +105,7 @@ class LoginController: BaseViewController {
 
             footerView.render(labelView("欢迎登录")) { label in
                 label.bold()
-                label.setTextSize(20)
+                label.setTextSize(20.0)
                 label.setTextColor("#070822")
                 label.makeGravityTop(offset: 30)
                 label.makeGravityHorizontal(offset: self.viewOffset)
@@ -163,7 +163,7 @@ class LoginController: BaseViewController {
 
                     //线
                     verifyCodeWrapView.render(hLine()) { line in
-                        line.makeGravityBottom(offset: -2)
+                        line.makeGravityBottom(offset: 2)
                         line.makeLeftToLeftOf(nil)
                         line.makeRightToRightOf(nil)
                     }
@@ -267,6 +267,8 @@ class LoginController: BaseViewController {
                 })
     }
 
+    var bean = HttpBean<String>()
+
     /// 跳转注册
     func register() {
         toast("注册")
@@ -288,6 +290,11 @@ class LoginController: BaseViewController {
         print(json.dictionaryObject)
 
         message("消息测试")
+
+
+        debugPrint(bean)
+        bean.data = "123"
+        debugPrint(bean)
     }
 
     var uuid: String = ""

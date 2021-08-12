@@ -67,14 +67,14 @@ class EditPasswordCell: DslTableCell {
             //view.sizeToFit()
             view.makeHeight(50)
             view.makeLeftToRightOf(self.label)
-            view.makeGravityRight(offset: -offset)
+            view.makeGravityRight(offset: offset)
             view.makeCenterY()
         }
 
         //横线
         contentView.render(line) { line in
             line.makeGravityLeft(offset: offset)
-            line.makeGravityRight(offset: -offset)
+            line.makeGravityRight(offset: offset)
             line.makeBottomToBottomOf(self.contentView)
         }
     }
