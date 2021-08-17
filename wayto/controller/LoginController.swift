@@ -195,7 +195,7 @@ class LoginController: BaseViewController {
                 }
             }
 
-            footerView.render(borderButton("注      册")) { button in
+            footerView.render(borderButton("注      册", titleSize: Res.text.normal.size)) { button in
                 button.makeHeight(minHeight: self.fieldHeight)
                 button.makeTopToBottomOf(offset: self.viewOffset)
                 button.makeGravityHorizontal(offset: self.viewOffset)
