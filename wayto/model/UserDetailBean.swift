@@ -32,7 +32,7 @@ struct UserDetailBean: Codable, NilObject {
     var fireControlNoExist: Bool?
     var securityCardNoExist: Bool?
     var user: User?
-    var userFamilyList: [UserFamilyList]?
+    var userFamilyList: [UserFamily]?
     var contract: Contract?
     var userFileList: [FileBean]?
     var nationName: String?
@@ -245,7 +245,7 @@ struct UserGroup: Codable {
 }
 
 // MARK: - UserFamilyList
-struct UserFamilyList: Codable {
+struct UserFamily: Codable {
     var id: Int?
     var createTime: String?
     var createUserId: Int?
