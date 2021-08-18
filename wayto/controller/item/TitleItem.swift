@@ -39,7 +39,7 @@ class TitleCell: DslTableCell {
         root.tg_cacheEstimatedRect = true
 
         root.setPaddingHorizontal(Res.size.leftMargin)
-        root.mWwH(minHeight: Res.size.itemMinHeight)
+        root.mWwH(minHeight: Res.size.minHeight)
         root.render(title) {
             $0.wrap_content()
             $0.frameGravityLC()

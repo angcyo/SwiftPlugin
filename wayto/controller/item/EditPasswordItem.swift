@@ -7,7 +7,7 @@ import UIKit
 
 class EditPasswordItem: DslTableItem, IEditItem, IFormItem {
 
-    var itemEditText: String? = nil
+    var editItemConfig: EditItemConfig = EditItemConfig()
 
     var formItemConfig: FormItemConfig = FormItemConfig()
 
@@ -33,7 +33,7 @@ class EditPasswordItem: DslTableItem, IEditItem, IFormItem {
     }
 
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        itemEditText = textField.text
+        editItemConfig.itemEditText = textField.text
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
