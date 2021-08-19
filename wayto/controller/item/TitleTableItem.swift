@@ -5,20 +5,20 @@
 import Foundation
 import UIKit
 
-class TitleItem: DslTableItem {
+class TitleTableItem: DslTableItem {
 
     var itemTitle: String? = nil
     var itemIcon: UIImage? = nil
 
     override func initItem() {
         super.initItem()
-        itemCell = TitleCell.self
+        itemCell = TitleTableCell.self
     }
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? TitleCell else {
+        guard let cell = cell as? TitleTableCell else {
             return
         }
 
@@ -27,7 +27,7 @@ class TitleItem: DslTableItem {
     }
 }
 
-class TitleCell: DslTableCell {
+class TitleTableCell: DslTableCell {
 
     let root = frameLayout()
     let title = titleView()

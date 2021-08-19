@@ -22,7 +22,7 @@ class ModifyPasswordController: BaseTableViewController {
     override func initTableView(tableView: DslTableView) {
         super.initTableView(tableView: tableView)
 
-        dslTableView.load(EditPasswordItem()) { item in
+        dslTableView.load(EditPasswordTableItem()) { item in
             item.formItemConfig.formKey = "oldPassword"
             item.formItemConfig.formCheck = { params, closure in
                 if nilOrEmpty(item.editItemConfig.itemEditText) {
@@ -32,13 +32,13 @@ class ModifyPasswordController: BaseTableViewController {
                 }
             }
             item.onBindCellOverride = { cell, path in
-                if let cell = cell as? EditPasswordCell {
+                if let cell = cell as? EditPasswordTableCell {
                     cell.label.text = "旧密码"
                     cell.textField.placeholder = "请输入"
                 }
             }
         }
-        dslTableView.load(EditPasswordItem()) { item in
+        dslTableView.load(EditPasswordTableItem()) { item in
             item.formItemConfig.formKey = "newPassword"
             item.formItemConfig.formCheck = { params, closure in
                 if nilOrEmpty(item.editItemConfig.itemEditText) {
@@ -48,13 +48,13 @@ class ModifyPasswordController: BaseTableViewController {
                 }
             }
             item.onBindCellOverride = { cell, path in
-                if let cell = cell as? EditPasswordCell {
+                if let cell = cell as? EditPasswordTableCell {
                     cell.label.text = "新密码"
                     cell.textField.placeholder = "请输入"
                 }
             }
         }
-        dslTableView.load(EditPasswordItem()) { item in
+        dslTableView.load(EditPasswordTableItem()) { item in
             item.formItemConfig.formCheck = { params, closure in
                 if nilOrEmpty(item.editItemConfig.itemEditText) {
                     closure(error("请输入新密码"))
@@ -65,7 +65,7 @@ class ModifyPasswordController: BaseTableViewController {
                 }
             }
             item.onBindCellOverride = { cell, path in
-                if let cell = cell as? EditPasswordCell {
+                if let cell = cell as? EditPasswordTableCell {
                     cell.label.text = "重复新密码"
                     cell.textField.placeholder = "请输入"
 
@@ -74,7 +74,7 @@ class ModifyPasswordController: BaseTableViewController {
             }
         }
 
-        dslTableView.load(DslButtonItem()) {
+        dslTableView.load(DslButtonTableItem()) {
             $0.itemSectionName = "button"
             $0.itemHeaderEstimatedHeight = 50
             $0.itemButtonText = "保存"

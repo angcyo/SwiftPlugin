@@ -5,14 +5,14 @@
 import Foundation
 import UIKit
 
-class EditPasswordItem: DslTableItem, IEditItem, IFormItem {
+class EditPasswordTableItem: DslTableItem, IEditItem, IFormItem {
 
     var editItemConfig: EditItemConfig = EditItemConfig()
 
     var formItemConfig: FormItemConfig = FormItemConfig()
 
     override func initItem() {
-        itemCell = EditPasswordCell.self
+        itemCell = EditPasswordTableCell.self
 
         itemHeight = 50
 //        item.itemHeaderHeight = 0.01
@@ -26,7 +26,7 @@ class EditPasswordItem: DslTableItem, IEditItem, IFormItem {
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
-        guard let cell = cell as? EditPasswordCell else {
+        guard let cell = cell as? EditPasswordTableCell else {
             return
         }
         initEditItem(cell.textField)
@@ -42,7 +42,7 @@ class EditPasswordItem: DslTableItem, IEditItem, IFormItem {
     }
 }
 
-class EditPasswordCell: DslTableCell {
+class EditPasswordTableCell: DslTableCell {
 
     let label = labelView(color: Res.text.body.color)
 
