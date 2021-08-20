@@ -47,6 +47,9 @@ class LoginController: BaseViewController {
     //验证码
     var verifyCodeWrapView: UIView? = nil
 
+    //自动登录
+    let autoLoginButton = checkButton(" 自动登录")
+
     let viewOffset: Float = 20
     let fieldHeight = 50
 
@@ -186,9 +189,27 @@ class LoginController: BaseViewController {
                 }
             }
 
+            // 自动登录 玩意密码
+            footerView.render(self.autoLoginButton) {
+                $0.sizeToFit()
+                $0.makeGravityLeft(offset: self.viewOffset)
+                $0.makeTopToBottomOf(secureTextField, offset: self.viewOffset)
+            }
+
+            let forgetButton = labelButton("忘记密码") { _ in
+                self.forget()
+            }
+            footerView.render(forgetButton) {
+                $0.sizeToFit()
+                $0.makeGravityRight(offset: self.viewOffset)
+                $0.makeCenterY(self.autoLoginButton)
+            }
+
+            // 登录 注册
+
             self.loginButton = footerView.render(button("登      录")) { button in
                 button.makeHeight(minHeight: self.fieldHeight)
-                button.makeTopToBottomOf(secureTextField, offset: self.viewOffset * 2)
+                button.makeTopToBottomOf(self.autoLoginButton, offset: self.viewOffset * 2)
                 button.makeGravityHorizontal(offset: self.viewOffset)
                 button.onClick { _ in
                     self.login()
@@ -215,6 +236,20 @@ class LoginController: BaseViewController {
 
         //默认不需要验证码
         verifyCodeWrapView?.isHidden = true
+    }
+
+    var bean = HttpBean<String>()
+
+    var uuid: String = ""
+}
+
+extension LoginController {
+    static func mainController() -> UIViewController? {
+        if let main = LoginController.MAIN_CONTROLLER {
+            return toViewController(main)
+        } else {
+            return nil
+        }
     }
 
     /// 开始登录
@@ -267,8 +302,6 @@ class LoginController: BaseViewController {
                 })
     }
 
-    var bean = HttpBean<String>()
-
     /// 跳转注册
     func register() {
         toast("注册")
@@ -297,8 +330,6 @@ class LoginController: BaseViewController {
         debugPrint(bean)
     }
 
-    var uuid: String = ""
-
     /// 显示验证码
     func showVerifyCode() {
         uuid = Util.uuid()
@@ -307,12 +338,10 @@ class LoginController: BaseViewController {
             let param = "verifyCodeId=\(self.uuid)&now=\(nowTime)&width=\(self.verifyCodeWidth)&height=\(self.verifyCodeHeight)"
             self.verifyCodeImage?.setImageUrl(connectUrl(url: "/auth2server/free/getVerifyImg?\(param)"))
 
-            if let button = self.loginButton {
-                button.remake { maker in
-                    button.makeHeight(minHeight: self.fieldHeight)
-                    button.makeTopToBottomOf(self.verifyCodeWrapView, offset: self.viewOffset * 2)
-                    button.makeGravityHorizontal(offset: self.viewOffset)
-                }
+            // 调整约束
+            self.autoLoginButton.remake { _ in
+                self.autoLoginButton.makeTopToBottomOf(self.verifyCodeWrapView, offset: self.viewOffset)
+                self.autoLoginButton.makeGravityLeft(offset: self.viewOffset)
             }
 
             self.verifyCodeField?.becomeFirstResponder()
@@ -322,11 +351,16 @@ class LoginController: BaseViewController {
         }
     }
 
+    /// 跳转忘记密码
+    func forget() {
+        message("忘记密码")
+    }
+
     /// 显示主页
     func showMain() {
-        if let main = LoginController.MAIN_CONTROLLER {
-            let rootVc: UIViewController = toViewController(main)
-            UIApplication.mainWindow?.rootViewController = rootVc
+        vm(LoginModel.self).isAutoLogin = autoLoginButton.isSelected
+        if let main = LoginController.mainController() {
+            UIApplication.mainWindow?.rootViewController = main
         } else {
             toast("请配置[MAIN_CONTROLLER]", position: .center)
         }

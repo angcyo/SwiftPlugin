@@ -12,6 +12,30 @@ class LoginModel: ViewModel {
     /// 登录成功之后的数据结构
     let loginBeanData = liveData(LoginBean())
 
+    /// 是否自动登录
+    var isAutoLogin: Bool {
+        get {
+            "KEY_AUTO_LOGIN".defGet() ?? false
+        }
+        set {
+            "KEY_AUTO_LOGIN".defSet(newValue)
+        }
+    }
+
+    /// 开始自动登录
+    func autoLogin(_ onResult: (Error?) -> Void) {
+        if isAutoLogin {
+            if let bean: LoginBean = "KEY_LoginBean".defGet() {
+                loginSucceed(bean)
+                onResult(nil)
+            } else {
+                onResult(error("请先登录"))
+            }
+        } else {
+            onResult(error("请手动登录"))
+        }
+    }
+
     //MARK: 请求
 
     // 登录请求
@@ -58,6 +82,9 @@ class LoginModel: ViewModel {
 
     /// 登录成功
     func loginSucceed(_ loginBean: LoginBean) {
+        //保存token, 方便下次自动登录
+        "KEY_LoginBean".defSet(loginBean)
+
         Http.credential = OAuthCredential(
                 accessToken: loginBean.access_token!,
                 refreshToken: loginBean.refresh_token!,
@@ -71,7 +98,12 @@ class LoginModel: ViewModel {
 
     // 退出登录
     func logout() {
-
+        isAutoLogin = false
     }
 
+    // 登出, 页面到登录页
+    func toLogout() {
+        logout()
+        showRootViewController(LoginController())
+    }
 }
