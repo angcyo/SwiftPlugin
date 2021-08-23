@@ -17,8 +17,6 @@ class ModifyPasswordController: BaseTableViewController {
         DslTableView(style: .insetGrouped)
     }
 
-    let formHelper = FormHelper()
-
     override func initTableView(tableView: DslTableView) {
         super.initTableView(tableView: tableView)
 
@@ -86,7 +84,7 @@ class ModifyPasswordController: BaseTableViewController {
 
     /// 提交
     func submit() {
-        formHelper.checkAndObtain(tableView: dslTableView) { params, error in
+        formHelper.checkAndObtain(dslTableView) { params, error in
             debugPrint(params.jsonData)
             if let error = error {
                 toast(error.message, position: .center)
