@@ -324,7 +324,6 @@ extension LoginController {
 
         message("消息测试")
 
-
         debugPrint(bean)
         bean.data = "123"
         debugPrint(bean)
@@ -353,7 +352,21 @@ extension LoginController {
 
     /// 跳转忘记密码
     func forget() {
-        message("忘记密码")
+        //message("忘记密码")
+        /// 获取用户详情资料
+//        vm(UserModel.self).getUserDetailEx(id: 1) { data, error in
+//            debugPrint(data, error)
+//        }
+
+        //BaseFormDialog().show()
+        pickerDialog {
+            $0.pickerItems = ["1", "2", "3"]
+            //$0.pickerItem = "2"
+            $0.onDialogResult = { dialog, row in
+                messageInfo("\(row)")
+                return false
+            }
+        }
     }
 
     /// 显示主页

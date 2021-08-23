@@ -7,10 +7,7 @@ import Foundation
 
 /// http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E5%BC%80%E9%98%B3-%E4%BA%BA%E5%91%98%E6%89%A9%E5%B1%95%E4%BF%A1%E6%81%AF/getDetailByIdUsingGET_8
 // MARK: - UserDetailBean
-struct UserDetailBean: Codable, NilObject {
-    var isNil: Bool {
-        id == nil || id == 0
-    }
+struct UserDetailBean: Codable {
     var id: Int?
     var updateTime: String?
     var updateUserId: Int?

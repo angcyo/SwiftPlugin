@@ -10,7 +10,7 @@ import RxSwift
 class LoginModel: ViewModel {
 
     /// 登录成功之后的数据结构
-    let loginBeanData = liveData(LoginBean())
+    let loginBeanData = liveData(LoginBean.self)
 
     /// 是否自动登录
     var isAutoLogin: Bool {
@@ -90,7 +90,7 @@ class LoginModel: ViewModel {
                 refreshToken: loginBean.refresh_token!,
                 userId: loginBean.user!.userId!,
                 expiration: Date(timeIntervalSince1970: nowTime + TimeInterval(loginBean.expires_in!)))
-        loginBeanData.onNext(loginBean)
+        loginBeanData.setValue(loginBean)
 
         /// 获取用户详情资料
         vm(UserModel.self).getUserDetailEx()
