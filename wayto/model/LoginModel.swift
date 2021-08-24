@@ -22,17 +22,42 @@ class LoginModel: ViewModel {
         }
     }
 
+    /// 登录的用户id
+    func loginUserId() -> Int? {
+        let bean: LoginBean? = loginBeanData.beanOrNil()
+        return bean?.user?.userId
+    }
+
     /// 开始自动登录
-    func autoLogin(_ onResult: (Error?) -> Void) {
+    func autoLogin(_ onResult: @escaping (Error?) -> Void) {
         if isAutoLogin {
             if let bean: LoginBean = "KEY_LoginBean".defGet() {
-                loginSucceed(bean)
-                onResult(nil)
+                refreshToken(bean.refresh_token) { loginBean, error in
+                    if let loginBean = loginBean, error == nil {
+                        self.loginSucceed(loginBean)
+                        onResult(nil)
+                    } else {
+                        onResult(error)
+                    }
+                }
             } else {
                 onResult(error("请先登录"))
             }
         } else {
             onResult(error("请手动登录"))
+        }
+    }
+
+    /// 刷新token自动登录
+    func refreshToken(_ refreshToken: String?, _ onResult: @escaping (LoginBean?, Error?) -> Void) {
+        let param: [String: Any] = [
+            "client_secret": "oauth-client-secret",
+            "client_id": "oauth-client-id",
+            "grant_type": "refresh_token",
+            "refresh_token": refreshToken ?? ""
+        ]
+        Api.post("/auth2server/oauth/token", query: param).requestBean { (loginBean: LoginBean?, error: Error?) in
+            onResult(loginBean, error)
         }
     }
 
@@ -66,7 +91,7 @@ class LoginModel: ViewModel {
     func login(_ username: String, _ password: String,
                _ onResult: @escaping (LoginBean?, Error?) -> Void) {
         loginRequest(username, password).requestDecodable { (loginBean: LoginBean?, error: Error?) in
-            debugPrint("登录返回:\(loginBean):\(error)")
+            print("登录返回:\(loginBean):\(error)")
             if let data = loginBean {
                 self.loginSucceed(data)
             }
@@ -99,6 +124,9 @@ class LoginModel: ViewModel {
     // 退出登录
     func logout() {
         isAutoLogin = false
+        Api.post("/auth2server/logout").requestString { data, error in
+            print("退出登录:\(data):\(error)")
+        }
     }
 
     // 登出, 页面到登录页

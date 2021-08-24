@@ -324,9 +324,9 @@ extension LoginController {
 
         message("消息测试")
 
-        debugPrint(bean)
+        print(bean)
         bean.data = "123"
-        debugPrint(bean)
+        print(bean)
     }
 
     /// 显示验证码
@@ -355,7 +355,7 @@ extension LoginController {
         //message("忘记密码")
         /// 获取用户详情资料
 //        vm(UserModel.self).getUserDetailEx(id: 1) { data, error in
-//            debugPrint(data, error)
+//            print(data, error)
 //        }
 
         //BaseFormDialog().show()

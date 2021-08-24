@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 class UserModel: ViewModel {
 
@@ -11,7 +12,7 @@ class UserModel: ViewModel {
 
     /// 登录的用户id
     func loginUserId() -> Int? {
-        return (vm(LoginModel.self).loginBeanData.valueOrNil() as? LoginBean)?.user?.userId
+        return vm(LoginModel.self).loginUserId()
     }
 
     func getUserDetailEx(_ onEnd: ((HttpBean<UserDetailBean>?, Error?) -> Void)? = nil) {
@@ -19,6 +20,7 @@ class UserModel: ViewModel {
     }
 
     /// 获取人员扩展信息
+    /// http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E5%BC%80%E9%98%B3-%E4%BA%BA%E5%91%98%E6%89%A9%E5%B1%95%E4%BF%A1%E6%81%AF/getDetailByIdUsingGET_11
     func getUserDetailEx(id: Int, _ onEnd: ((HttpBean<UserDetailBean>?, Error?) -> Void)? = nil) {
         let mainId = loginUserId()
         let url = "\(App.SystemSchema)/userExt/getDetailById"
@@ -30,6 +32,15 @@ class UserModel: ViewModel {
                 }
             }
             onEnd?(bean, error)
+        }.disposed(by: disposeBag)
+    }
+
+    /// 修改人员扩展信息
+    /// http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E5%BC%80%E9%98%B3-%E4%BA%BA%E5%91%98%E6%89%A9%E5%B1%95%E4%BF%A1%E6%81%AF/updateByIdUsingPUT_11
+    func putUserDetail(param: [String: Any]?, _ onEnd: ((JSON?, Error?) -> Void)? = nil) {
+        let url = "\(App.SystemSchema)/userExt/updateById"
+        Api.json(url, param, method: .put) { data, error in
+            onEnd?(data, error)
         }.disposed(by: disposeBag)
     }
 }

@@ -91,7 +91,7 @@ class ModifyPasswordController: BaseTableViewController {
             } else {
                 hideKeyboard()
                 showLoading()
-                vm(LoginModel.self).updatePassword(params.jsonData.dictionaryObject) { json, error in
+                vm(LoginModel.self).updatePassword(params.params()) { json, error in
                     hideLoading()
                     if let error = error {
                         messageWarn(error.message)
