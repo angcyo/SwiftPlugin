@@ -54,4 +54,31 @@ class UserModel: ViewModel {
         }
         return file?.filePath?.toSchemaUrl()
     }
+
+    /// 保存家庭成员
+    /// http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E5%BC%80%E9%98%B3-%E4%BA%BA%E5%91%98%E5%AE%B6%E5%BA%AD%E6%88%90%E5%91%98%E4%BF%A1%E6%81%AF/saveUsingPOST_12
+    func saveFamily(param: [String: Any]?, _ onEnd: ((JSON?, Error?) -> Void)? = nil) {
+        let url = "\(App.SystemSchema)/userFamily/save"
+        Api.json(url, param, method: .post) { data, error in
+            onEnd?(data, error)
+        }.disposed(by: disposeBag)
+    }
+
+    /// 修改家庭成员
+    /// http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E5%BC%80%E9%98%B3-%E4%BA%BA%E5%91%98%E5%AE%B6%E5%BA%AD%E6%88%90%E5%91%98%E4%BF%A1%E6%81%AF/saveUsingPOST_12
+    func putFamily(param: [String: Any]?, _ onEnd: ((JSON?, Error?) -> Void)? = nil) {
+        let url = "\(App.SystemSchema)/userFamily/updateById"
+        Api.json(url, param, method: .put) { data, error in
+            onEnd?(data, error)
+        }.disposed(by: disposeBag)
+    }
+
+    /// 删除家庭成员
+    /// http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E5%BC%80%E9%98%B3-%E4%BA%BA%E5%91%98%E5%AE%B6%E5%BA%AD%E6%88%90%E5%91%98%E4%BF%A1%E6%81%AF/virtualRemoveByIdUsingPUT_12
+    func removeFamily(id: Int, _ onEnd: ((JSON?, Error?) -> Void)? = nil) {
+        let url = "\(App.SystemSchema)/userFamily/virtualRemoveById"
+        Api.json(url, query: ["id": id], method: .put) { data, error in
+            onEnd?(data, error)
+        }.disposed(by: disposeBag)
+    }
 }

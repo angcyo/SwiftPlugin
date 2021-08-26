@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 /// 修改密码
-class ModifyPasswordController: BaseTableViewController {
+class EditPasswordController: BaseTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
