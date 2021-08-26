@@ -74,7 +74,6 @@ class ModifyPasswordController: BaseTableViewController {
 
         dslTableView.load(DslButtonTableItem()) {
             $0.itemSectionName = "button"
-            $0.itemHeaderEstimatedHeight = 50
             $0.itemButtonText = "保存"
             $0.onItemClick = {
                 self.submit()

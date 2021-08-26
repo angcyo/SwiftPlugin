@@ -43,4 +43,15 @@ class UserModel: ViewModel {
             onEnd?(data, error)
         }.disposed(by: disposeBag)
     }
+
+    /// 获取指定类型的图片url
+    func getUserFileUrl(_ type: Int) -> String? {
+        guard let bean: UserDetailBean = userDetailData.data() else {
+            return nil
+        }
+        let file = bean.userFileList?.find {
+            $0.fileType == type
+        }
+        return file?.filePath?.toSchemaUrl()
+    }
 }
