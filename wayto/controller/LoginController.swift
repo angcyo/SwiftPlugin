@@ -207,7 +207,7 @@ class LoginController: BaseViewController {
 
             // 登录 注册
 
-            self.loginButton = footerView.render(button("登      录")) { button in
+            self.loginButton = footerView.render(gradientButton("登      录")) { button in
                 button.makeHeight(minHeight: self.fieldHeight)
                 button.makeTopToBottomOf(self.autoLoginButton, offset: self.viewOffset * 2)
                 button.makeGravityHorizontal(offset: self.viewOffset)
@@ -217,6 +217,7 @@ class LoginController: BaseViewController {
             }
 
             footerView.render(borderButton("注      册", titleSize: Res.text.normal.size)) { button in
+                //button.setTextGradient()
                 button.makeHeight(minHeight: self.fieldHeight)
                 button.makeTopToBottomOf(offset: self.viewOffset)
                 button.makeGravityHorizontal(offset: self.viewOffset)
@@ -359,14 +360,14 @@ extension LoginController {
 //        }
 
         //BaseFormDialog().show()
-        pickerDialog {
+        /*pickerDialog {
             $0.pickerItems = ["1", "2", "3"]
             //$0.pickerItem = "2"
             $0.onDialogResult = { dialog, row in
                 messageInfo("\(row)")
                 return false
             }
-        }
+        }*/
     }
 
     /// 显示主页
