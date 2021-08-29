@@ -103,6 +103,10 @@ class LoginModel: ViewModel {
         Api.put("\(App.SystemSchema)/user/updatePassword", query: param).requestJson(onResult)
     }
 
+    func updatePasswordByCode(_ param: [String: Any]?, _ onResult: @escaping (JSON?, Error?) -> Void) {
+        Api.put("\(App.SystemSchema)/user/updatePasswordByCode", query: param).requestJson(onResult)
+    }
+
     //MARK: 操作
 
     /// 登录成功
@@ -132,6 +136,7 @@ class LoginModel: ViewModel {
     // 登出, 页面到登录页
     func toLogout() {
         logout()
-        showRootViewController(LoginController())
+        //showRootViewController(LoginController())
+        navWrap(LoginController())
     }
 }

@@ -21,6 +21,9 @@ class LoginController: BaseViewController {
     /// 登录成功后的启动界面
     static var MAIN_CONTROLLER: AnyClass? = nil
 
+    /// 主要的导航控制器
+    static var MAIN_NAVIGATION_CONTROLLER: AnyClass? = nil
+
     /// 状态栏样式
     override var preferredStatusBarStyle: UIStatusBarStyle {
         /// 白色字体的状态栏
@@ -50,8 +53,13 @@ class LoginController: BaseViewController {
     //自动登录
     let autoLoginButton = checkButton(" 自动登录")
 
-    let viewOffset: Float = 20
+    let viewOffset: CGFloat = 20
     let fieldHeight = 50
+
+    override func initController() {
+        super.initController()
+        showNavigationBar = false
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -226,6 +234,10 @@ class LoginController: BaseViewController {
                 }
             }
 
+            /*footerView.render(icon(sfImage(.cCircle))) {
+                $0.makeWidthHeight(size: 50)
+            }*/
+
             //圆角
             footerView.setRoundTop(8)
         }
@@ -245,8 +257,19 @@ class LoginController: BaseViewController {
 }
 
 extension LoginController {
+
+    /// 主要的控制器
     static func mainController() -> UIViewController? {
         if let main = LoginController.MAIN_CONTROLLER {
+            return toViewController(main)
+        } else {
+            return nil
+        }
+    }
+
+    /// 主要的导航控制器
+    static func mainNavigationController() -> UINavigationController? {
+        if let main = LoginController.MAIN_NAVIGATION_CONTROLLER {
             return toViewController(main)
         } else {
             return nil
@@ -353,21 +376,7 @@ extension LoginController {
 
     /// 跳转忘记密码
     func forget() {
-        //message("忘记密码")
-        /// 获取用户详情资料
-//        vm(UserModel.self).getUserDetailEx(id: 1) { data, error in
-//            print(data, error)
-//        }
-
-        //BaseFormDialog().show()
-        /*pickerDialog {
-            $0.pickerItems = ["1", "2", "3"]
-            //$0.pickerItem = "2"
-            $0.onDialogResult = { dialog, row in
-                messageInfo("\(row)")
-                return false
-            }
-        }*/
+        push(ForgetPasswordController())
     }
 
     /// 显示主页

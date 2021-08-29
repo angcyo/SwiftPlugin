@@ -22,6 +22,7 @@ class EditPasswordController: BaseTableViewController {
 
         dslTableView.load(EditPasswordTableItem()) { item in
             item.formItemConfig.formKey = "oldPassword"
+            item.editItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             item.formItemConfig.formCheck = { params, closure in
                 if nilOrEmpty(item.editItemConfig.itemEditText) {
                     closure(error("请输入旧密码"))
@@ -38,6 +39,7 @@ class EditPasswordController: BaseTableViewController {
         }
         dslTableView.load(EditPasswordTableItem()) { item in
             item.formItemConfig.formKey = "newPassword"
+            item.editItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             item.formItemConfig.formCheck = { params, closure in
                 if nilOrEmpty(item.editItemConfig.itemEditText) {
                     closure(error("请输入新密码"))
@@ -53,6 +55,7 @@ class EditPasswordController: BaseTableViewController {
             }
         }
         dslTableView.load(EditPasswordTableItem()) { item in
+            item.editItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             item.formItemConfig.formCheck = { params, closure in
                 if nilOrEmpty(item.editItemConfig.itemEditText) {
                     closure(error("请输入新密码"))
