@@ -96,7 +96,7 @@ class EditPasswordController: BaseTableViewController {
                 vm(LoginModel.self).updatePassword(params.params()) { json, error in
                     hideLoading()
                     if let error = error {
-                        messageWarn(error.message)
+                        messageError(error.message)
                     } else {
                         messageSuccess("修改成功")
                         pop(self)

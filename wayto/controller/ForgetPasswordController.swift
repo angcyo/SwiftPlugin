@@ -17,24 +17,41 @@ class ForgetPasswordController: BaseTableViewController {
         DslTableView(style: .insetGrouped)
     }
 
+    let userModel = vm(UserModel.self)
+
     override func initTableView(tableView: DslTableView) {
         super.initTableView(tableView: tableView)
 
         dslTableView.load(FormEditTableItem()) {
             $0.itemLabel = "手机号码"
+            $0.itemTag = "mobile"
             $0.editItemConfig.itemEditMaxLength = 11
             $0.editItemConfig.itemEditKeyboardType = .numberPad
-            $0.formItemConfig.formKey = "mobile"
+            $0.formItemConfig.formKey = $0.itemTag
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入手机号码"
         }
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormEditVerifyTableItem()) {
             $0.itemLabel = "验证码"
-            $0.editItemConfig.itemEditMaxLength = 6
-            $0.editItemConfig.itemEditKeyboardType = .emailAddress
+            $0.editItemConfig.itemEditMaxLength = Res.size.codeMaxLength
+            $0.editItemConfig.itemEditKeyboardType = .numberPad
             $0.formItemConfig.formKey = "code"
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入验证码"
+            $0.onRequestCode = { verifyButton in
+                formHelper.checkAndObtain(self.dslTableView, itemTags: ["mobile"]) { params, error in
+                    if error == nil {
+                        verifyButton.startCountDown()
+                        let mobile = params.jsonData["mobile"].string
+                        self.userModel.getSimMsg(mobile: mobile!, simCode: .ResetPassword) { json, error in
+                            if let error = error {
+                                verifyButton.stopCountDown()
+                                messageWarn(error.message)
+                            }
+                        }
+                    }
+                }
+            }
         }
         dslTableView.load(FormEditTableItem()) {
             $0.itemLabel = "密码"
@@ -52,44 +69,17 @@ class ForgetPasswordController: BaseTableViewController {
             $0.editItemConfig.itemEditKeyboardType = .emailAddress
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入确认密码"
-        }
-        /*dslTableView.load(EditPasswordTableItem()) {
-            $0.formItemConfig.formKey = "newPassword"
             let item = $0
             $0.formItemConfig.formCheck = { params, end in
-                if nilOrEmpty(item.editItemConfig.itemEditText) {
-                    end(error("请输入新密码"))
-                } else {
-                    end(nil)
-                }
-            }
-            $0.onBindCellOverride = { cell, path in
-                if let cell = cell as? EditPasswordTableCell {
-                    cell.label.text = "新密码"
-                    cell.textField.placeholder = "请输入"
-                }
-            }
-        }
-        dslTableView.load(EditPasswordTableItem()) {
-            let item = $0
-            $0.formItemConfig.formCheck = { params, end in
-                if nilOrEmpty(item.editItemConfig.itemEditText) {
-                    end(error("请输入新密码"))
-                } else if (params.jsonData["newPassword"].rawString() != item.editItemConfig.itemEditText) {
+                if item.formItemConfig.formValue == nil {
+                    end(error("请输入确认密码"))
+                } else if (params.jsonData["password"].rawString() != item.formItemConfig.formValue as! String) {
                     end(error("两次密码,不一致"))
                 } else {
                     end(nil)
                 }
             }
-            $0.onBindCellOverride = { cell, path in
-                if let cell = cell as? EditPasswordTableCell {
-                    cell.label.text = "重复新密码"
-                    cell.textField.placeholder = "请输入"
-
-                    cell.line.isHidden = true
-                }
-            }
-        }*/
+        }
 
         dslTableView.load(DslButtonTableItem()) {
             $0.itemSectionName = "button"
@@ -112,7 +102,7 @@ class ForgetPasswordController: BaseTableViewController {
                 vm(LoginModel.self).updatePasswordByCode(params.params()) { json, error in
                     hideLoading()
                     if let error = error {
-                        messageWarn(error.message)
+                        messageError(error.message)
                     } else {
                         messageSuccess("修改成功")
                         pop(self)

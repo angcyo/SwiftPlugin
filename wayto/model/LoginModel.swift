@@ -99,12 +99,14 @@ class LoginModel: ViewModel {
         }
     }
 
+    ///http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/updatePasswordUsingPUT
     func updatePassword(_ param: [String: Any]?, _ onResult: @escaping (JSON?, Error?) -> Void) {
         Api.put("\(App.SystemSchema)/user/updatePassword", query: param).requestJson(onResult)
     }
 
+    ///http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF/updatePasswordByCodeUsingPUT
     func updatePasswordByCode(_ param: [String: Any]?, _ onResult: @escaping (JSON?, Error?) -> Void) {
-        Api.put("\(App.SystemSchema)/user/updatePasswordByCode", query: param).requestJson(onResult)
+        Api.put("\(App.SystemSchema)/user/updatePasswordByCode", param).requestJson(onResult)
     }
 
     //MARK: 操作

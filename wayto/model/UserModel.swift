@@ -4,6 +4,7 @@
 
 import Foundation
 import SwiftyJSON
+import UIKit
 
 class UserModel: ViewModel {
 
@@ -78,6 +79,23 @@ class UserModel: ViewModel {
     func removeFamily(id: Int, _ onEnd: ((JSON?, Error?) -> Void)? = nil) {
         let url = "\(App.SystemSchema)/userFamily/virtualRemoveById"
         Api.json(url, query: ["id": id], method: .put) { data, error in
+            onEnd?(data, error)
+        }.disposed(by: disposeBag)
+    }
+
+    enum SimCode: String {
+        case Register = "kaiyang-register"
+        case ResetPassword = "kaiyang-reset-password"
+    }
+
+    /*
+     短信接口：
+    注册simCode：kaiyang-register
+    找回密码simCode: kaiyang-reset-password
+      */
+    func getSimMsg(mobile: String, simCode: SimCode, _ onEnd: ((JSON?, Error?) -> Void)? = nil) {
+        let url = "/sim/free/getSimMsg"
+        Api.json(url, query: ["mobile": mobile, "simCode": simCode.rawValue], method: .get) { data, error in
             onEnd?(data, error)
         }.disposed(by: disposeBag)
     }
