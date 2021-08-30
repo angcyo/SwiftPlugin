@@ -238,6 +238,15 @@ class LoginController: BaseViewController {
                 $0.makeWidthHeight(size: 50)
             }*/
 
+            /*footerView.render(VerifyButton()) {
+                let button = $0
+                $0.makeGravityTop(offset: 30)
+                $0.makeGravityRight(offset: 30)
+                $0.onClick { _ in
+                    button.startCountDown()
+                }
+            }*/
+
             //圆角
             footerView.setRoundTop(8)
         }
@@ -328,29 +337,7 @@ extension LoginController {
 
     /// 跳转注册
     func register() {
-        toast("注册")
-        var json = JSON()
-        var path = ["p", "p1", "p2"]
-        json.ensurePath(path)
-
-        var obj = JSON()
-        obj["a"] = 1
-        obj["b"] = "b"
-        json.add(path, value: obj)
-        json.add(path, value: obj)
-        //json[path]
-        //json["d2"] = ["dd2_1", "dd2_2"]
-
-        try! json.merge(with: obj)
-
-        print(json)
-        print(json.dictionaryObject)
-
-        message("消息测试")
-
-        print(bean)
-        bean.data = "123"
-        print(bean)
+        push(RegisterController())
     }
 
     /// 显示验证码

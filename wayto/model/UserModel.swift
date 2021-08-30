@@ -99,4 +99,13 @@ class UserModel: ViewModel {
             onEnd?(data, error)
         }.disposed(by: disposeBag)
     }
+
+    ///注册
+    ///http://test.kaiyang.wayto.com.cn/kaiyangSystem/doc.html#/default/%E5%BC%80%E9%98%B3-%E4%BA%BA%E5%91%98%E6%89%A9%E5%B1%95%E4%BF%A1%E6%81%AF/saveRegisterUsingPOST
+    func register(param: [String: Any]?, _ onEnd: ((JSON?, Error?) -> Void)? = nil) {
+        let url = "\(App.SystemSchema)/userExt/saveRegister"
+        Api.json(url, param, method: .post) { data, error in
+            onEnd?(data, error)
+        }.disposed(by: disposeBag)
+    }
 }
