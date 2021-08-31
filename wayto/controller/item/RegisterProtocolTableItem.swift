@@ -8,7 +8,26 @@ import SwiftRichString
 
 /// 注册协议item
 
-class RegisterProtocolTableItem: DslTableItem {
+class RegisterProtocolTableItem: DslTableItem, IFormItem, CheckboxButtonDelegate {
+
+    var formItemConfig = FormItemConfig()
+
+    /// 需要打开的协议地址
+    var itemProtocolUrl: String? = nil
+
+    override func initItem() {
+        super.initItem()
+        formItemConfig.formVerify = true
+        formItemConfig.formVerifyErrorTip = "请先同意注册协议"
+        formItemConfig.formCheck = { params, end in
+            if let value = self.formItemConfig.onGetFormValue(params) as? Bool, value {
+                //同意协议
+                end(nil)
+            } else {
+                end(error(self.formItemConfig.formVerifyErrorTip))
+            }
+        }
+    }
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
@@ -20,15 +39,26 @@ class RegisterProtocolTableItem: DslTableItem {
         //去掉group的背景
         cell.backgroundColor = UIColor.clear
 
+        cell.cellConfig.checkButton.delegate = self
         cell.cellConfig.checkButton.setTextSize(Res.text.body.size)
         cell.cellConfig.checkButton.setText("我已阅读并同意")
+        cell.cellConfig.checkButton.isOn = (formItemConfig.formValue as? Bool) ?? false
 
         cell.cellConfig.linkLabel.setTextSize(Res.text.body.size)
         cell.cellConfig.linkLabel.setText("《注册协议》")
-
         cell.cellConfig.linkLabel.onClick { _ in
-            message("click")
+            showUrl(self.itemProtocolUrl)
         }
+    }
+
+    //MARK: CheckboxButtonDelegate
+
+    func checkboxButtonDidSelect(_ button: CheckboxButton) {
+        updateFormItemValue(button.isOn)
+    }
+
+    func checkboxButtonDidDeselect(_ button: CheckboxButton) {
+        updateFormItemValue(button.isOn)
     }
 }
 

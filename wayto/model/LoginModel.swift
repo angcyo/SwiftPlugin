@@ -139,6 +139,6 @@ class LoginModel: ViewModel {
     func toLogout() {
         logout()
         //showRootViewController(LoginController())
-        navWrap(LoginController())
+        push(navWrap(LoginController()), animated: false, root: true)
     }
 }

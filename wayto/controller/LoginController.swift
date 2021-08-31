@@ -252,8 +252,8 @@ class LoginController: BaseViewController {
         }
 
         if D.isDebug {
-            usernameField?.text = "admin"
-            passwordField?.text = "admin"
+            usernameField?.text = "13847250675" //"admin"
+            passwordField?.text = "123456"//"admin"
         }
 
         //默认不需要验证码
@@ -337,7 +337,11 @@ extension LoginController {
 
     /// 跳转注册
     func register() {
-        push(RegisterController())
+        let vc = RegisterController()
+        vc.onRegisterAction = {
+            self.usernameField?.text = $0
+        }
+        push(vc)
     }
 
     /// 显示验证码

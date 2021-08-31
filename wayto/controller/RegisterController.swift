@@ -19,12 +19,14 @@ class RegisterController: BaseTableViewController {
 
     let userModel = vm(UserModel.self)
 
+    let keyMobile = "mobile"
+
     override func initTableView(tableView: DslTableView) {
         super.initTableView(tableView: tableView)
 
         dslTableView.load(FormEditTableItem()) {
             $0.itemLabel = "手机号码"
-            $0.itemTag = "mobile"
+            $0.itemTag = self.keyMobile
             $0.editItemConfig.itemEditMaxLength = 11
             $0.editItemConfig.itemEditKeyboardType = .numberPad
             $0.formItemConfig.formKey = $0.itemTag
@@ -90,8 +92,12 @@ class RegisterController: BaseTableViewController {
         }
         dslTableView.load(RegisterProtocolTableItem()) {
             $0.itemSectionName = "button"
+            $0.itemProtocolUrl = "http://test.kaiyang.wayto.com.cn/doc/index.html"
         }
     }
+
+    /// 注册成功之后, 回调注册的账号
+    var onRegisterAction: ((String) -> Void)? = nil
 
     /// 提交
     func submit() {
@@ -102,12 +108,14 @@ class RegisterController: BaseTableViewController {
             } else {
                 hideKeyboard()
                 showLoading()
+                let mobile = params.params()![keyMobile] as! String
                 userModel.register(param: params.params()) { json, error in
                     hideLoading()
                     if let error = error {
                         messageError(error.message)
                     } else {
                         messageSuccess("注册成功")
+                        self.onRegisterAction?(mobile)
                         pop(self)
                     }
                 }
