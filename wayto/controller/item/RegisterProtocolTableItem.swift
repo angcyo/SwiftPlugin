@@ -81,7 +81,7 @@ class RegisterProtocolTableCellConfig: IDslCellConfig {
     let checkButton = mbCheckboxButton()
     let linkLabel = labelView(color: Res.color.colorPrimary)
 
-    func getRootView() -> UIView {
+    func getRootView(_ cell: UIView) -> UIView {
         formRoot
     }
 

@@ -11,7 +11,6 @@ struct UserDetailBean: Codable {
     var id: Int?
     var updateTime: String?
     var updateUserId: Int?
-    var nation: Int?
     var qualification: Int?
     var politicalStatus: Int?
     var securityCardNumber: String?
@@ -32,6 +31,8 @@ struct UserDetailBean: Codable {
     var userFamilyList: [UserFamily]?
     var contract: Contract?
     var userFileList: [FileBean]?
+    var nation: Int?
+    var personalAuth: Int? //个人认证状态,0未认证,1认证信息已提交,2实名认证成功,3实名认证失败
     var nationName: String?
     var qualificationName: String?
     var politicalStatusName: String?
@@ -64,6 +65,7 @@ struct UserDetailBean: Codable {
         case contract
         case userFileList
         case nationName
+        case personalAuth
         case qualificationName
         case politicalStatusName
         case bloodTypeName
@@ -127,7 +129,6 @@ struct User: Codable {
     var entryDate: String?
     var areaId: Int?
     var positionId: Int?
-    var idCardNum: String?
     var accountList: [AccountList]?
     var userGroup: UserGroup?
     var userGroupId: Int?
@@ -137,6 +138,13 @@ struct User: Codable {
     var statusName: String?
     var maritalStatusName: String?
     var positionName: String?
+
+    var idCardAddress: String? //	身份证地址	string
+    var idCardEndDate: String? //	身份证有效期结束时间	string
+    var idCardNum: String? // 	身份证号	string
+    var idCardSignOrg: String?  //	身份证签发机关	string
+    var idCardStartAndEndDate: String? //	身份证开始时间和结束时间融合字段	string
+    var idCardStartDate: String?  //	身份证有效期开始时间	string
 
     //var allRoleIdList: [JSONAny]?
 
@@ -163,7 +171,6 @@ struct User: Codable {
         case entryDate
         case areaId
         case positionId
-        case idCardNum
         case accountList
         case userGroup
         case userGroupId
@@ -174,6 +181,13 @@ struct User: Codable {
         case maritalStatusName
         case positionName
         //case allRoleIdList
+
+        case idCardAddress
+        case idCardEndDate
+        case idCardNum
+        case idCardSignOrg
+        case idCardStartAndEndDate
+        case idCardStartDate
     }
 }
 
