@@ -24,12 +24,18 @@ class IdentityAuthController: BaseTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        dslTableView.load(AuthCameraItem()) {
+
+        dslTableView.load(DslLabelTableItem()) {
+            $0.labelItemConfig.itemLabelText = "一个账户只能进行一次实名认证，认证成功后不可修改!"
+            $0.labelItemConfig.itemLabelTextAlignment = .center
+            $0.labelItemConfig.itemLabelColor = "#FC532E".toColor()
+        }
+        dslTableView.load(AuthCameraTableItem()) {
             $0.itemAuthPlaceholderImage = R.image.png_identity_front()
             $0.itemAuthLabel = "请上传身份证人像面"
             $0.formItemConfig.formVerifyErrorTip = $0.itemAuthLabel!
         }
-        dslTableView.load(AuthCameraItem()) {
+        dslTableView.load(AuthCameraTableItem()) {
             $0.itemAuthPlaceholderImage = R.image.png_identity_back()
             $0.itemAuthLabel = "请上传身份证国徽面"
             $0.formItemConfig.formVerifyErrorTip = $0.itemAuthLabel!

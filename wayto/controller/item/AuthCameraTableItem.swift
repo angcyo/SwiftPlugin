@@ -7,7 +7,7 @@ import UIKit
 
 /// 授权界面, 上传身份证正反面的item
 
-class AuthCameraItem: DslTableItem, IFormItem {
+class AuthCameraTableItem: DslTableItem, IFormItem {
 
     var formItemConfig = FormItemConfig()
 
@@ -40,18 +40,16 @@ class AuthCameraItem: DslTableItem, IFormItem {
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
         super.bindCell(cell, indexPath)
 
-        guard let cell = cell as? AuthCameraCell else {
-            return
+        cell.cellConfigOf(AuthCameraCellConfig.self) {
+            $0.image.setImage(itemAuthImage ?? itemAuthPlaceholderImage)
+            $0.label.setText(itemAuthLabel)
+            $0.icon.setVisible(itemAuthImage == nil)
         }
-
-        cell.cellConfig.image.setImage(itemAuthImage ?? itemAuthPlaceholderImage)
-        cell.cellConfig.label.setText(itemAuthLabel)
-        cell.cellConfig.icon.setVisible(itemAuthImage == nil)
     }
 
 }
 
-class AuthCameraCell: DslTableCell {
+class AuthCameraTableCell: DslTableCell {
 
     fileprivate let cellConfig: AuthCameraCellConfig = AuthCameraCellConfig()
 
