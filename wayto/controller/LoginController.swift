@@ -374,7 +374,7 @@ extension LoginController {
     func showMain() {
         vm(LoginModel.self).isAutoLogin = autoLoginButton.isSelected
         if let main = LoginController.mainController() {
-            UIApplication.mainWindow?.rootViewController = main
+            push(navWrap(main), animated: false, root: true)
         } else {
             toast("请配置[MAIN_CONTROLLER]", position: .center)
         }
