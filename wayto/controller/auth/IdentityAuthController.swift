@@ -94,6 +94,7 @@ class IdentityAuthController: BaseTableViewController {
                         }.disposed(by: self.disposeBag)
                     }
                 }
+                helper.checkMd5 = false
                 helper.onConfigQueryParameters = { _ in
                     if helper._uploadIndex == 0 {
                         return ["side": IdentityAuthController.FACE]

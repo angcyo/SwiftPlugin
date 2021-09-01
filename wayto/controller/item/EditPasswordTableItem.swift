@@ -29,7 +29,7 @@ class EditPasswordTableItem: DslTableItem, ITextFieldItem, IFormItem {
         guard let cell = cell as? EditPasswordTableCell else {
             return
         }
-        initEditItem(cell.textField)
+        initTextFieldItem(cell.textField)
     }
 
     func textFieldDidChangeSelection(_ textField: UITextField) {
