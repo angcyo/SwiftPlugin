@@ -252,8 +252,11 @@ class LoginController: BaseViewController {
         }
 
         if D.isDebug {
-            usernameField?.text = "13847250675" //"admin"
-            passwordField?.text = "123456"//"admin"
+//            usernameField?.text = "13847250675" //"admin"
+//            passwordField?.text = "123456"//"admin"
+
+            usernameField?.text = "admin"
+            passwordField?.text = "admin"
         }
 
         //默认不需要验证码

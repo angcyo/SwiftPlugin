@@ -5,9 +5,9 @@
 import Foundation
 import UIKit
 
-class EditPasswordTableItem: DslTableItem, IEditItem, IFormItem {
+class EditPasswordTableItem: DslTableItem, ITextFieldItem, IFormItem {
 
-    var editItemConfig: EditItemConfig = EditItemConfig()
+    var textFieldItemConfig: TextFieldItemConfig = TextFieldItemConfig()
 
     var formItemConfig: FormItemConfig = FormItemConfig()
 
@@ -33,7 +33,7 @@ class EditPasswordTableItem: DslTableItem, IEditItem, IFormItem {
     }
 
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        editItemConfig.itemEditText = textField.text
+        textFieldItemConfig.itemEditText = textField.text
         formItemConfig.formValue = textField.text
         itemChange = true
     }

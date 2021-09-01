@@ -24,19 +24,19 @@ class RegisterController: BaseTableViewController {
     override func initTableView(tableView: DslTableView) {
         super.initTableView(tableView: tableView)
 
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "手机号码"
             $0.itemTag = self.keyMobile
-            $0.editItemConfig.itemEditMaxLength = 11
-            $0.editItemConfig.itemEditKeyboardType = .numberPad
+            $0.textFieldItemConfig.itemEditMaxLength = 11
+            $0.textFieldItemConfig.itemEditKeyboardType = .numberPad
             $0.formItemConfig.formKey = $0.itemTag
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入手机号码"
         }
-        dslTableView.load(FormEditVerifyTableItem()) {
+        dslTableView.load(FormTextFieldVerifyTableItem()) {
             $0.itemLabel = "验证码"
-            $0.editItemConfig.itemEditMaxLength = Res.size.codeMaxLength
-            $0.editItemConfig.itemEditKeyboardType = .numberPad
+            $0.textFieldItemConfig.itemEditMaxLength = Res.size.codeMaxLength
+            $0.textFieldItemConfig.itemEditKeyboardType = .numberPad
             $0.formItemConfig.formKey = "code"
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入验证码"
@@ -55,20 +55,20 @@ class RegisterController: BaseTableViewController {
                 }
             }
         }
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "密码"
-            $0.editItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
-            $0.editItemConfig.itemSecureTextEntry = true
-            $0.editItemConfig.itemEditKeyboardType = .emailAddress
+            $0.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
+            $0.textFieldItemConfig.itemSecureTextEntry = true
+            $0.textFieldItemConfig.itemEditKeyboardType = .emailAddress
             $0.formItemConfig.formKey = "password"
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入密码"
         }
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "确认密码"
-            $0.editItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
-            $0.editItemConfig.itemSecureTextEntry = true
-            $0.editItemConfig.itemEditKeyboardType = .emailAddress
+            $0.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
+            $0.textFieldItemConfig.itemSecureTextEntry = true
+            $0.textFieldItemConfig.itemEditKeyboardType = .emailAddress
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入确认密码"
             let item = $0

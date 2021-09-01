@@ -25,35 +25,35 @@ class IdentityAuthNextController: BaseTableViewController {
 
     func renderTable() {
         dslTableView.clearAllItems()
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "姓名"
-            $0.editItemConfig.itemEditEnable = false
-            $0.editItemConfig.itemEditText = self.authBean?.personInfo?.name
+            $0.textFieldItemConfig.itemEditEnable = false
+            $0.textFieldItemConfig.itemEditText = self.authBean?.personInfo?.name
         }
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "性别"
-            $0.editItemConfig.itemEditEnable = false
-            $0.editItemConfig.itemEditText = self.authBean?.personInfo?.sex
+            $0.textFieldItemConfig.itemEditEnable = false
+            $0.textFieldItemConfig.itemEditText = self.authBean?.personInfo?.sex
         }
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "年龄"
-            $0.editItemConfig.itemEditEnable = false
-            $0.editItemConfig.itemEditText = self.authBean?.personInfo?.age?.toString()
+            $0.textFieldItemConfig.itemEditEnable = false
+            $0.textFieldItemConfig.itemEditText = self.authBean?.personInfo?.age?.toString()
         }
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "身份证号"
-            $0.editItemConfig.itemEditEnable = false
-            $0.editItemConfig.itemEditText = self.authBean?.personInfo?.num
+            $0.textFieldItemConfig.itemEditEnable = false
+            $0.textFieldItemConfig.itemEditText = self.authBean?.personInfo?.num
         }
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "通讯地址"
-            $0.editItemConfig.itemEditEnable = false
-            $0.editItemConfig.itemEditText = self.authBean?.personInfo?.address
+            $0.textFieldItemConfig.itemEditEnable = false
+            $0.textFieldItemConfig.itemEditText = self.authBean?.personInfo?.address
         }
-        dslTableView.load(FormEditTableItem()) {
+        dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "有效期"
-            $0.editItemConfig.itemEditEnable = false
-            $0.editItemConfig.itemEditText = "\(self.authBean?.personInfo?.startDate ?? "") ~ \(self.authBean?.personInfo?.endDate ?? "")"
+            $0.textFieldItemConfig.itemEditEnable = false
+            $0.textFieldItemConfig.itemEditText = "\(self.authBean?.personInfo?.startDate ?? "") ~ \(self.authBean?.personInfo?.endDate ?? "")"
         }
 
         dslTableView.load(DslButtonTableItem()) {
