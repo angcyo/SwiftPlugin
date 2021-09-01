@@ -18,9 +18,9 @@ class AuthCameraTableItem: DslTableItem, IFormItem {
     var itemAuthPlaceholderImage: UIImage? = nil
 
     /// 选择的图片
-    var itemAuthImage: Any? = nil {
+    var itemAuthImage: UIImage? = nil {
         didSet {
-            updateFormItemValue(itemAuthImage)
+            updateFormItemValue(itemAuthImage?.toFormFile())
         }
     }
 

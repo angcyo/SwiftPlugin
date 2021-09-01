@@ -13,6 +13,10 @@ import Foundation
 
 class IdentityAuthController: BaseTableViewController {
 
+    static let FACE = "face"
+
+    static let BACK = "back"
+
     override func initController() {
         super.initController()
         title = "实名认证"
@@ -34,11 +38,13 @@ class IdentityAuthController: BaseTableViewController {
             $0.itemAuthPlaceholderImage = R.image.png_identity_front()
             $0.itemAuthLabel = "请上传身份证人像面"
             $0.formItemConfig.formVerifyErrorTip = $0.itemAuthLabel!
+            $0.formItemConfig.formKey = IdentityAuthController.FACE
         }
         dslTableView.load(AuthCameraTableItem()) {
             $0.itemAuthPlaceholderImage = R.image.png_identity_back()
             $0.itemAuthLabel = "请上传身份证国徽面"
             $0.formItemConfig.formVerifyErrorTip = $0.itemAuthLabel!
+            $0.formItemConfig.formKey = IdentityAuthController.BACK
         }
 
         dslTableView.load(DslButtonTableItem()) {
@@ -55,7 +61,7 @@ class IdentityAuthController: BaseTableViewController {
     /// 提交表单数据
     func submit() {
         formHelper.checkAndObtain(dslTableView) { params, error in
-            print("表单数据:", params.params())
+            L.w("表单数据:\(params.params())")
 
             if let error = error {
                 toast(error.message, position: .center)
@@ -65,25 +71,36 @@ class IdentityAuthController: BaseTableViewController {
             } else {
                 params.put("param.id", vm(LoginModel.self).loginUserId())
 
-                /*hideKeyboard()
+                hideKeyboard()
                 showLoading()
 
-                params.uploadFile { error in
+                let helper = params.uploadFile(url: "/ocr/ocr/idCardNum") { error in
                     if let error = error {
                         hideLoading()
-                        toast(error.message)
+                        messageError(error.message)
                     } else {
-                        vm(UserModel.self).putUserDetail(param: params.params()) { json, error in
+                        //获取认证链接
+                        let faceOcrResultId = params.params()![IdentityAuthController.FACE]!
+                        let backOcrResultId = params.params()![IdentityAuthController.BACK]!
+                        Api.bean("/kaiyangQys/kyQys/getAuth", query: ["faceOcrResultId": faceOcrResultId, "backOcrResultId": backOcrResultId], method: .get) { (bean: HttpBean<AuthBean>?, error: Error?) in
                             hideLoading()
-                            if let error = error {
-                                messageError(error.message)
+                            if error == nil, let bean = bean {
+                                let vc = IdentityAuthNextController()
+                                vc.authBean = bean.data
+                                push(vc)
                             } else {
-                                messageSuccess("修改成功")
-                                pop(self)
+                                messageError(error?.message ?? Api.DEF_ERROR_TIP)
                             }
-                        }
+                        }.disposed(by: self.disposeBag)
                     }
-                }*/
+                }
+                helper.onConfigQueryParameters = { _ in
+                    if helper._uploadIndex == 0 {
+                        return ["side": IdentityAuthController.FACE]
+                    } else {
+                        return ["side": IdentityAuthController.BACK]
+                    }
+                }
             }
         }
     }
