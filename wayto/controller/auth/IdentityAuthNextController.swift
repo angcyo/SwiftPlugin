@@ -20,8 +20,30 @@ class IdentityAuthNextController: IdentityAuthStatusController {
             $0.itemSectionName = "button"
             $0.itemButtonText = "下一步"
             $0.onItemClick = {
-                showUrl(self.authBean?.authUrl)
+                with(showUrl(self.authBean?.authUrl)) {
+                    $0.toolbarItemTypes = [.back, .forward, .reload]
+
+                    $0.onWebViewDidFinish = { vc, url in
+
+                        self.updateAuthStatus()
+
+                        if url.absoluteString == self.authBean?.callbackPage {
+                            //认证成功
+                            vm(UserModel.self).getUserDetailEx()
+                            popTo(LoginController.MAIN_CONTROLLER)
+                        } else {
+                            //认证中
+                        }
+                    }
+                }
             }
         }
+    }
+
+    func updateAuthStatus() {
+        let url = "\(App.SystemSchema)/userExt/updateAuthStatusHandle"
+        Api.json(url, method: .put) { data, error in
+            //no op
+        }.disposed(by: disposeBag)
     }
 }

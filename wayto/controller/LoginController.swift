@@ -251,13 +251,19 @@ class LoginController: BaseViewController {
             footerView.setRoundTop(8)
         }
 
-        if D.isDebug {
-//            usernameField?.text = "13847250675" //"admin"
-//            passwordField?.text = "123456"//"admin"
+        var userName = LoginModel.lastUserName
 
-            usernameField?.text = "admin"
-            passwordField?.text = "admin"
+        if D.isDebug {
+
+            if nilOrEmpty(userName) {
+                userName = "13847250675" //"admin"
+                //usernameField?.text = "admin"
+            }
+
+            passwordField?.text = "123456" //"admin"
         }
+
+        usernameField?.text = userName
 
         //默认不需要验证码
         verifyCodeWrapView?.isHidden = true
@@ -324,6 +330,7 @@ extension LoginController {
                     let json = JSON(response.data)
                     if error == nil {
                         toast("登录成功")
+                        LoginModel.lastUserName = username
                         self.showMain()
                     } else if let error = error {
                         let needVerifyCode = response.response?.headers.value(for: "needVerifyCode")
@@ -375,7 +382,7 @@ extension LoginController {
 
     /// 显示主页
     func showMain() {
-        vm(LoginModel.self).isAutoLogin = autoLoginButton.isSelected
+        LoginModel.isAutoLogin = autoLoginButton.isSelected
         if let main = LoginController.mainController() {
             push(navWrap(main), animated: false, root: true)
         } else {

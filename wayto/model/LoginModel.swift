@@ -13,12 +13,22 @@ class LoginModel: ViewModel {
     let loginBeanData = liveData(LoginBean.self)
 
     /// 是否自动登录
-    var isAutoLogin: Bool {
+    static var isAutoLogin: Bool {
         get {
             "KEY_AUTO_LOGIN".defGet() ?? false
         }
         set {
             "KEY_AUTO_LOGIN".defSet(newValue)
+        }
+    }
+
+    /// 最后一次登录成功的用户名
+    static var lastUserName: String? {
+        get {
+            "KEY_LAST_USER_NAME".defGet()
+        }
+        set {
+            "KEY_LAST_USER_NAME".defSet(newValue)
         }
     }
 
@@ -30,7 +40,7 @@ class LoginModel: ViewModel {
 
     /// 开始自动登录
     func autoLogin(_ onResult: @escaping (Error?) -> Void) {
-        if isAutoLogin {
+        if LoginModel.isAutoLogin {
             if let bean: LoginBean = "KEY_LoginBean".defGet() {
                 refreshToken(bean.refresh_token) { loginBean, error in
                     if let loginBean = loginBean, error == nil {
@@ -129,7 +139,7 @@ class LoginModel: ViewModel {
 
     // 退出登录
     func logout() {
-        isAutoLogin = false
+        LoginModel.isAutoLogin = false
         Api.post("/auth2server/logout").requestString { data, error in
             print("退出登录:\(data):\(error)")
         }
