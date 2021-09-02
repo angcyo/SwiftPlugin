@@ -15,7 +15,7 @@ struct AuthBean: Codable {
     var authUrl: String?
     var callbackPage: String?
     var mobile: String?
-    var personInfo: PersonInfo?
+    var personInfo: AuthPersonInfo?
     var ticket: String?
 
     enum CodingKeys: String, CodingKey {
@@ -29,7 +29,7 @@ struct AuthBean: Codable {
 }
 
 // MARK: - PersonInfo
-struct PersonInfo: Codable {
+struct AuthPersonInfo: Codable {
     var address: String?
     var age: Int?
     var backFileId: Int?
@@ -63,3 +63,17 @@ struct PersonInfo: Codable {
     }
 }
 
+extension UserDetailBean {
+
+    func toAuthPersonInfo() -> AuthPersonInfo {
+        var bean = AuthPersonInfo()
+        bean.name = user?.name
+        bean.sex = user?.sex
+        bean.age = user?.age
+        bean.num = user?.idCardNum
+        bean.address = user?.idCardAddress
+        bean.startDate = user?.idCardStartDate
+        bean.endDate = user?.idCardEndDate
+        return bean
+    }
+}

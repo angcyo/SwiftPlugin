@@ -8,8 +8,8 @@ import UIKit
 /// 注册界面
 class RegisterController: BaseTableViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func initControllerView() {
+        super.initControllerView()
         title = "注册"
     }
 

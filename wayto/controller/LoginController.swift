@@ -61,8 +61,8 @@ class LoginController: BaseViewController {
         showNavigationBar = false
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func initControllerView() {
+        super.initControllerView()
         title = "登录"
 
         view.backgroundColor = UIColor.white

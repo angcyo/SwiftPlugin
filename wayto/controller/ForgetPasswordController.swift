@@ -8,8 +8,8 @@ import UIKit
 /// 忘记密码
 class ForgetPasswordController: BaseTableViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func initControllerView() {
+        super.initControllerView()
         title = "忘记密码"
     }
 

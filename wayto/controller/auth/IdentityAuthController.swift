@@ -17,17 +17,13 @@ class IdentityAuthController: BaseTableViewController {
 
     static let BACK = "back"
 
-    override func initController() {
-        super.initController()
-        title = "实名认证"
-    }
-
     override func createTableView() -> DslTableView {
         DslTableView(style: .insetGrouped)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func initControllerView() {
+        super.initControllerView()
+        title = "实名认证"
 
         dslTableView.load(DslLabelTableItem()) {
             $0.labelItemConfig.itemLabelText = "一个账户只能进行一次实名认证，认证成功后不可修改!"

@@ -8,8 +8,8 @@ import UIKit
 /// 修改密码
 class EditPasswordController: BaseTableViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func initControllerView() {
+        super.initControllerView()
         title = "修改密码"
     }
 
