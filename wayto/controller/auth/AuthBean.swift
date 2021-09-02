@@ -68,7 +68,7 @@ extension UserDetailBean {
     func toAuthPersonInfo() -> AuthPersonInfo {
         var bean = AuthPersonInfo()
         bean.name = user?.name
-        bean.sex = user?.sex
+        bean.sex = user?.sexName
         bean.age = user?.age
         bean.num = user?.idCardNum
         bean.address = user?.idCardAddress
