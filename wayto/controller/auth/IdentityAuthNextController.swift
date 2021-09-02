@@ -45,15 +45,15 @@ class IdentityAuthNextController: BaseTableViewController {
             $0.textFieldItemConfig.itemEditEnable = false
             $0.textFieldItemConfig.itemEditText = self.authBean?.personInfo?.num
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        dslTableView.load(FormTextViewTableItem()) {
             $0.itemLabel = "通讯地址"
-            $0.textFieldItemConfig.itemEditEnable = false
-            $0.textFieldItemConfig.itemEditText = self.authBean?.personInfo?.address
+            $0.textViewItemConfig.itemEditEnable = false
+            $0.textViewItemConfig.itemEditText = self.authBean?.personInfo?.address
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        dslTableView.load(FormTextViewTableItem()) {
             $0.itemLabel = "有效期"
-            $0.textFieldItemConfig.itemEditEnable = false
-            $0.textFieldItemConfig.itemEditText = "\(self.authBean?.personInfo?.startDate ?? "") ~ \(self.authBean?.personInfo?.endDate ?? "")"
+            $0.textViewItemConfig.itemEditEnable = false
+            $0.textViewItemConfig.itemEditText = "\(self.authBean?.personInfo?.startDate ?? "") ~ \(self.authBean?.personInfo?.endDate ?? "")"
         }
 
         dslTableView.load(DslButtonTableItem()) {
