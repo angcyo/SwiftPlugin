@@ -8,8 +8,8 @@ import UIKit
 /// 注册界面
 class RegisterController: BaseTableViewController {
 
-    override func initControllerView() {
-        super.initControllerView()
+    override func initController() {
+        super.initController()
         title = "注册"
     }
 
@@ -92,7 +92,7 @@ class RegisterController: BaseTableViewController {
         }
         dslTableView.load(RegisterProtocolTableItem()) {
             $0.itemSectionName = "button"
-            $0.itemProtocolUrl = "http://test.kaiyang.wayto.com.cn/doc/index.html"
+            $0.itemProtocolUrl = "http://test.kaiyang.wayto.com.cn/doc/index.html"//"http://www.baidu.com"//"http://test.kaiyang.wayto.com.cn/doc/index.html"
         }
     }
 

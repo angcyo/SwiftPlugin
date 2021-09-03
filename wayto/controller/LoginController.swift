@@ -59,11 +59,11 @@ class LoginController: BaseViewController {
     override func initController() {
         super.initController()
         showNavigationBar = false
+        title = "登录"
     }
 
     override func initControllerView() {
         super.initControllerView()
-        title = "登录"
 
         view.backgroundColor = UIColor.white
         let headerHeight = UIScreen.height / 3
