@@ -272,6 +272,27 @@ class LoginController: BaseViewController {
     var bean = HttpBean<String>()
 
     var uuid: String = ""
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        // 响应键盘
+        //view.frame.origin.y = -(UIScreen.height - footerHeight - safeTop.toFloat()).toCGFloat()
+    }
+
+    override func sceneWillEnterForeground(_ scene: UIScene) {
+        super.sceneWillEnterForeground(scene)
+    }
+
+    override func sceneDidBecomeActive(_ scene: UIScene) {
+        super.sceneDidBecomeActive(scene)
+
+        // 恢复键盘
+        let old = view.frame.origin.y
+        doMain {
+            self.view.frame.origin.y = old
+        }
+    }
 }
 
 extension LoginController {
