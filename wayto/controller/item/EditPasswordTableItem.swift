@@ -22,6 +22,8 @@ class EditPasswordTableItem: DslTableItem, ITextFieldItem, IFormItem {
 
         itemCanHighlight = false
         itemCanSelect = false
+
+        formItemConfig.formVerify = true
     }
 
     override func bindCell(_ cell: DslCell, _ indexPath: IndexPath) {
@@ -34,8 +36,7 @@ class EditPasswordTableItem: DslTableItem, ITextFieldItem, IFormItem {
 
     func textFieldDidChangeSelection(_ textField: UITextField) {
         textFieldItemConfig.itemEditText = textField.text
-        formItemConfig.formValue = textField.text
-        itemChange = true
+        updateFormItemValue(textField.text)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
