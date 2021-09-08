@@ -58,7 +58,7 @@ class DslMapView: MAMapView, MAMapViewDelegate {
 
     /// 2. 地图区域即将改变时会调用此接口
     func mapView(_ mapView: MAMapView!, regionWillChangeAnimated animated: Bool, wasUserAction: Bool) {
-        L.i("regionWillChange:\(wasUserAction) zoom:\(mapView.zoomLevel) location:\(mapView.userLocation.location)")
+        L.d("regionWillChange:\(wasUserAction) zoom:\(mapView.zoomLevel) location:\(mapView.userLocation.location)")
     }
 
     /// 3.
