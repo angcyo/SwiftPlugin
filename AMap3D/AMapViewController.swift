@@ -11,7 +11,7 @@ import MAMapKit
 class AMapViewController: BaseViewController, MAMapViewDelegate {
 
     /// 地图组件
-    var mapView: DslMapView = DslMapView()
+    let mapView: DslMapView = DslMapView()
 
     override func initControllerView() {
         super.initControllerView()
