@@ -13,6 +13,8 @@ class AMapViewController: BaseViewController, MAMapViewDelegate {
     /// 地图组件
     let mapView: DslMapView = DslMapView()
 
+    let mapControlView = AMapControlView()
+
     override func initControllerView() {
         super.initControllerView()
         initMapView()
@@ -32,6 +34,13 @@ class AMapViewController: BaseViewController, MAMapViewDelegate {
 
         //init style
         mapView.initView()
+
+        //默认控件在地图左下角
+        mapControlView.mapView = mapView
+        view.render(mapControlView) {
+            $0.makeGravityLeft(offset: Res.size.x)
+            $0.makeBottomToBottomOf(self.mapView, offset: Res.size.x2)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
