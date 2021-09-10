@@ -49,7 +49,7 @@ class IdentityAuthStatusController: BaseTableViewController {
     let itemLabelMinWidth: CGFloat = 70
 
     func renderTable() {
-        dslTableView.clearAllItems()
+        dslTableView.recyclerDataSource.clearAllItems()
         dslTableView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "姓名"
             $0.itemLabelMinWidth = self.itemLabelMinWidth

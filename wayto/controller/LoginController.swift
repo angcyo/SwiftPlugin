@@ -80,7 +80,7 @@ class LoginController: BaseViewController {
             if height > 0 {
                 // 键盘显示
                 safeTop = max(safeTop, self.view.safeAreaInsets.top)
-                self.view.frame.origin.y = -(UIScreen.height - footerHeight - safeTop.toFloat()).toCGFloat()
+                self.view.frame.origin.y = -(UIScreen.height - footerHeight - safeTop)
             } else {
                 // 键盘隐藏
                 self.view.frame.origin.y = 0
