@@ -21,10 +21,10 @@ class RegisterController: BaseTableViewController {
 
     let keyMobile = "mobile"
 
-    override func initTableView(tableView: DslTableView) {
-        super.initTableView(tableView: tableView)
+    override func initTableView(recyclerView: DslTableView) {
+        super.initTableView(recyclerView: recyclerView)
 
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "手机号码"
             $0.itemTag = self.keyMobile
             $0.textFieldItemConfig.itemEditMaxLength = 11
@@ -33,7 +33,7 @@ class RegisterController: BaseTableViewController {
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入手机号码"
         }
-        dslTableView.load(FormTextFieldVerifyTableItem()) {
+        recyclerView.load(FormTextFieldVerifyTableItem()) {
             $0.itemLabel = "验证码"
             $0.textFieldItemConfig.itemEditMaxLength = Res.size.codeMaxLength
             $0.textFieldItemConfig.itemEditKeyboardType = .numberPad
@@ -41,7 +41,7 @@ class RegisterController: BaseTableViewController {
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入验证码"
             $0.onRequestCode = { verifyButton in
-                formHelper.checkAndObtain(self.dslTableView, itemTags: ["mobile"]) { params, error in
+                formHelper.checkAndObtain(self.recyclerView, itemTags: ["mobile"]) { params, error in
                     if error == nil {
                         verifyButton.startCountDown()
                         let mobile = params.jsonData["mobile"].string
@@ -55,7 +55,7 @@ class RegisterController: BaseTableViewController {
                 }
             }
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "密码"
             $0.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             $0.textFieldItemConfig.itemSecureTextEntry = true
@@ -64,7 +64,7 @@ class RegisterController: BaseTableViewController {
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入密码"
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "确认密码"
             $0.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             $0.textFieldItemConfig.itemSecureTextEntry = true
@@ -83,14 +83,14 @@ class RegisterController: BaseTableViewController {
             }
         }
 
-        dslTableView.load(DslButtonTableItem()) {
+        recyclerView.load(DslButtonTableItem()) {
             $0.itemSectionName = "button"
             $0.itemButtonText = "注 册"
             $0.onItemClick = {
                 self.submit()
             }
         }
-        dslTableView.load(RegisterProtocolTableItem()) {
+        recyclerView.load(RegisterProtocolTableItem()) {
             $0.itemSectionName = "button"
             $0.itemProtocolUrl = "http://test.kaiyang.wayto.com.cn/doc/index.html"//"http://www.baidu.com"//"http://test.kaiyang.wayto.com.cn/doc/index.html"
         }
@@ -101,7 +101,7 @@ class RegisterController: BaseTableViewController {
 
     /// 提交
     func submit() {
-        formHelper.checkAndObtain(dslTableView) { params, error in
+        formHelper.checkAndObtain(recyclerView) { params, error in
             debugPrint(params.jsonData)
             if let error = error {
                 toast(error.message, position: .center)

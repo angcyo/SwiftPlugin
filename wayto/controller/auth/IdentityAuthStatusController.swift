@@ -29,7 +29,7 @@ class IdentityAuthStatusController: BaseTableViewController {
 
         if let personalAuth = personalAuth, personalAuth == 1 || personalAuth == 2 {
             //授权状态
-            dslTableView.waitBounds {
+            recyclerView.waitBounds {
                 let authStatus: UIView
                 if personalAuth == 2 {
                     authStatus = scaleImageView(R.image.img_auth_ed())
@@ -37,10 +37,10 @@ class IdentityAuthStatusController: BaseTableViewController {
                     authStatus = scaleImageView(R.image.img_auth_ing())
                 }
                 let size: CGFloat = 114
-                self.dslTableView.render(authStatus) {
+                self.recyclerView.render(authStatus) {
                     $0.makeWidthHeight(size: size)
                     $0.makeGravityTop(offset: Res.size.leftMargin)
-                    $0.makeGravityLeft(offset: self.dslTableView.width - Res.size.leftMargin - Res.size.leftMargin - size)
+                    $0.makeGravityLeft(offset: self.recyclerView.width - Res.size.leftMargin - Res.size.leftMargin - size)
                 }
             }
         }
@@ -49,38 +49,38 @@ class IdentityAuthStatusController: BaseTableViewController {
     let itemLabelMinWidth: CGFloat = 70
 
     func renderTable() {
-        dslTableView.recyclerDataSource.clearAllItems()
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.recyclerDataSource.clearAllItems()
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "姓名"
             $0.itemLabelMinWidth = self.itemLabelMinWidth
             $0.textFieldItemConfig.itemEditEnable = false
             $0.textFieldItemConfig.itemEditText = self.personInfo?.name
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "性别"
             $0.itemLabelMinWidth = self.itemLabelMinWidth
             $0.textFieldItemConfig.itemEditEnable = false
             $0.textFieldItemConfig.itemEditText = self.personInfo?.sex
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "年龄"
             $0.itemLabelMinWidth = self.itemLabelMinWidth
             $0.textFieldItemConfig.itemEditEnable = false
             $0.textFieldItemConfig.itemEditText = self.personInfo?.age?.toString()
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "身份证号"
             $0.itemLabelMinWidth = self.itemLabelMinWidth
             $0.textFieldItemConfig.itemEditEnable = false
             $0.textFieldItemConfig.itemEditText = self.personInfo?.num
         }
-        dslTableView.load(FormTextViewTableItem()) {
+        recyclerView.load(FormTextViewTableItem()) {
             $0.itemLabel = "通讯地址"
             $0.itemLabelMinWidth = self.itemLabelMinWidth
             $0.textViewItemConfig.itemEditEnable = false
             $0.textViewItemConfig.itemEditText = self.personInfo?.address ?? Core.DEF_NIL_STRING
         }
-        dslTableView.load(FormTextViewTableItem()) {
+        recyclerView.load(FormTextViewTableItem()) {
             $0.itemLabel = "有效期"
             $0.itemLabelMinWidth = self.itemLabelMinWidth
             $0.textViewItemConfig.itemEditEnable = false

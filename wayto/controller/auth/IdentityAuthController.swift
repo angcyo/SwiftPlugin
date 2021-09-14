@@ -25,25 +25,25 @@ class IdentityAuthController: BaseTableViewController {
         super.initControllerView()
         title = "实名认证"
 
-        dslTableView.load(DslLabelTableItem()) {
+        recyclerView.load(DslLabelTableItem()) {
             $0.labelItemConfig.itemLabelText = "一个账户只能进行一次实名认证，认证成功后不可修改!"
             $0.labelItemConfig.itemLabelTextAlignment = .center
             $0.labelItemConfig.itemLabelColor = "#FC532E".toColor()
         }
-        dslTableView.load(AuthCameraTableItem()) {
+        recyclerView.load(AuthCameraTableItem()) {
             $0.itemAuthPlaceholderImage = R.image.png_identity_front()
             $0.itemAuthLabel = "请上传身份证人像面"
             $0.formItemConfig.formVerifyErrorTip = $0.itemAuthLabel!
             $0.formItemConfig.formKey = IdentityAuthController.FACE
         }
-        dslTableView.load(AuthCameraTableItem()) {
+        recyclerView.load(AuthCameraTableItem()) {
             $0.itemAuthPlaceholderImage = R.image.png_identity_back()
             $0.itemAuthLabel = "请上传身份证国徽面"
             $0.formItemConfig.formVerifyErrorTip = $0.itemAuthLabel!
             $0.formItemConfig.formKey = IdentityAuthController.BACK
         }
 
-        dslTableView.load(DslButtonTableItem()) {
+        recyclerView.load(DslButtonTableItem()) {
             $0.itemSectionName = "button"
             $0.itemButtonText = "提交"
             $0.onItemClick = {
@@ -56,7 +56,7 @@ class IdentityAuthController: BaseTableViewController {
 
     /// 提交表单数据
     func submit() {
-        formHelper.checkAndObtain(dslTableView) { params, error in
+        formHelper.checkAndObtain(recyclerView) { params, error in
             L.w("表单数据:\(params.params())")
 
             if let error = error {

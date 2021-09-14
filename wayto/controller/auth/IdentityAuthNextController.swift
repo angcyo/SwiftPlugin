@@ -16,7 +16,7 @@ class IdentityAuthNextController: IdentityAuthStatusController {
 
     override func renderTable() {
         super.renderTable()
-        dslTableView.load(DslButtonTableItem()) {
+        recyclerView.load(DslButtonTableItem()) {
             $0.itemSectionName = "button"
             $0.itemButtonText = "下一步"
             $0.onItemClick = {

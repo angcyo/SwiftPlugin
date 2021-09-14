@@ -17,10 +17,10 @@ class EditPasswordController: BaseTableViewController {
         DslTableView(style: .insetGrouped)
     }
 
-    override func initTableView(tableView: DslTableView) {
-        super.initTableView(tableView: tableView)
+    override func initTableView(recyclerView: DslTableView) {
+        super.initTableView(recyclerView: recyclerView)
 
-        dslTableView.load(EditPasswordTableItem()) { item in
+        recyclerView.load(EditPasswordTableItem()) { item in
             item.formItemConfig.formKey = "oldPassword"
             item.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             item.formItemConfig.formCheck = { params, closure in
@@ -37,7 +37,7 @@ class EditPasswordController: BaseTableViewController {
                 }
             }
         }
-        dslTableView.load(EditPasswordTableItem()) { item in
+        recyclerView.load(EditPasswordTableItem()) { item in
             item.formItemConfig.formKey = "newPassword"
             item.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             item.formItemConfig.formCheck = { params, closure in
@@ -54,7 +54,7 @@ class EditPasswordController: BaseTableViewController {
                 }
             }
         }
-        dslTableView.load(EditPasswordTableItem()) { item in
+        recyclerView.load(EditPasswordTableItem()) { item in
             item.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             item.formItemConfig.formCheck = { params, closure in
                 if nilOrEmpty(item.textFieldItemConfig.itemEditText) {
@@ -75,7 +75,7 @@ class EditPasswordController: BaseTableViewController {
             }
         }
 
-        dslTableView.load(DslButtonTableItem()) {
+        recyclerView.load(DslButtonTableItem()) {
             $0.itemSectionName = "button"
             $0.itemButtonText = "保存"
             $0.onItemClick = {
@@ -86,7 +86,7 @@ class EditPasswordController: BaseTableViewController {
 
     /// 提交
     func submit() {
-        formHelper.checkAndObtain(dslTableView) { params, error in
+        formHelper.checkAndObtain(recyclerView) { params, error in
             debugPrint(params.jsonData)
             if let error = error {
                 toast(error.message, position: .center)

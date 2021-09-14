@@ -19,10 +19,10 @@ class ForgetPasswordController: BaseTableViewController {
 
     let userModel = vm(UserModel.self)
 
-    override func initTableView(tableView: DslTableView) {
-        super.initTableView(tableView: tableView)
+    override func initTableView(recyclerView: DslTableView) {
+        super.initTableView(recyclerView: recyclerView)
 
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "手机号码"
             $0.itemTag = "mobile"
             $0.textFieldItemConfig.itemEditMaxLength = 11
@@ -31,7 +31,7 @@ class ForgetPasswordController: BaseTableViewController {
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入手机号码"
         }
-        dslTableView.load(FormTextFieldVerifyTableItem()) {
+        recyclerView.load(FormTextFieldVerifyTableItem()) {
             $0.itemLabel = "验证码"
             $0.textFieldItemConfig.itemEditMaxLength = Res.size.codeMaxLength
             $0.textFieldItemConfig.itemEditKeyboardType = .numberPad
@@ -39,7 +39,7 @@ class ForgetPasswordController: BaseTableViewController {
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入验证码"
             $0.onRequestCode = { verifyButton in
-                formHelper.checkAndObtain(self.dslTableView, itemTags: ["mobile"]) { params, error in
+                formHelper.checkAndObtain(self.recyclerView, itemTags: ["mobile"]) { params, error in
                     if error == nil {
                         verifyButton.startCountDown()
                         let mobile = params.jsonData["mobile"].string
@@ -53,7 +53,7 @@ class ForgetPasswordController: BaseTableViewController {
                 }
             }
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "密码"
             $0.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             $0.textFieldItemConfig.itemSecureTextEntry = true
@@ -62,7 +62,7 @@ class ForgetPasswordController: BaseTableViewController {
             $0.formItemConfig.formVerify = true
             $0.formItemConfig.formVerifyErrorTip = "请输入密码"
         }
-        dslTableView.load(FormTextFieldTableItem()) {
+        recyclerView.load(FormTextFieldTableItem()) {
             $0.itemLabel = "确认密码"
             $0.textFieldItemConfig.itemEditMaxLength = Res.size.passwordMaxLength
             $0.textFieldItemConfig.itemSecureTextEntry = true
@@ -81,7 +81,7 @@ class ForgetPasswordController: BaseTableViewController {
             }
         }
 
-        dslTableView.load(DslButtonTableItem()) {
+        recyclerView.load(DslButtonTableItem()) {
             $0.itemSectionName = "button"
             $0.itemButtonText = "提 交"
             $0.onItemClick = {
@@ -92,7 +92,7 @@ class ForgetPasswordController: BaseTableViewController {
 
     /// 提交
     func submit() {
-        formHelper.checkAndObtain(dslTableView) { params, error in
+        formHelper.checkAndObtain(recyclerView) { params, error in
             debugPrint(params.jsonData)
             if let error = error {
                 toast(error.message, position: .center)
