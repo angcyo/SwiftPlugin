@@ -372,8 +372,7 @@ extension LoginController {
         vc.onRegisterAction = {
             self.usernameField?.text = $0
         }
-        //push(vc)
-        push(ToDoController())
+        push(vc)
     }
 
     /// 显示验证码
