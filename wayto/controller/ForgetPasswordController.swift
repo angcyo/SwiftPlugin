@@ -82,7 +82,7 @@ class ForgetPasswordController: BaseTableViewController {
         }
 
         recyclerView.load(DslButtonTableItem()) {
-            $0.itemSectionName = "button"
+            $0.itemSectionName = "submit"
             $0.itemButtonText = "提 交"
             $0.onItemClick = {
                 self.submit()

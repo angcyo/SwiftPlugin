@@ -76,7 +76,7 @@ class EditPasswordController: BaseTableViewController {
         }
 
         recyclerView.load(DslButtonTableItem()) {
-            $0.itemSectionName = "button"
+            $0.itemSectionName = "submit"
             $0.itemButtonText = "保存"
             $0.onItemClick = {
                 self.submit()
